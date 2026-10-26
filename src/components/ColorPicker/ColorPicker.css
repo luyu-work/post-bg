@@ -59,7 +59,7 @@
 
 .color-picker__fields {
   display: grid;
-  grid-template-columns: auto 1fr 64px;
+  grid-template-columns: auto 1fr 88px;
   gap: 8px;
   align-items: center;
 }
@@ -100,6 +100,19 @@
 
 .color-picker__input:focus-visible {
   box-shadow: 0 0 0 1px var(--color);
+}
+
+/* иконка слева, за нее тянут мышью и меняют проценты */
+.color-picker__scrub {
+  margin-right: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color) calc(var(--alpha) * 100%), transparent) 0 0),
+    conic-gradient(#bdbdbd 25%, #fff 0 50%, #bdbdbd 0 75%, #fff 0) 0 0 / 8px 8px;
+  cursor: ew-resize;
+  touch-action: none;
 }
 
 /* поле процентов лежит внутри общей плашки, свой фон не нужен, число на 1px выше */

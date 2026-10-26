@@ -6,12 +6,13 @@
   transition: right 200ms ease 700ms;
   position: fixed;
   top: 16px;
+  padding-top: 16px;
   right: 16px;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* панель настроек лежит поверх, органы управления отъезжают влево от нее */

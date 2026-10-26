@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import { clamp, hexToRgb, hsvToRgb, parseHex, rgbToHex, rgbToHsv, type Hsv } from '../../lib/color-utils'
 import { useDrag } from '../../lib/useDrag'
 import './ColorPicker.css'
@@ -36,6 +36,25 @@ export const ColorPicker = ({ color, alpha, onColor, onAlpha }: Props) => {
   const hue = useDrag((x) => apply([x * 360, hsv[1], hsv[2]]), INSET)
   const opacity = useDrag((x) => onAlpha(Math.round(x * 100) / 100), INSET)
 
+  // тянем иконку мышью, 1px равен 1%, как в Figma
+  const scrubStart = useRef<{ x: number; value: number } | null>(null)
+  const scrub = {
+    onPointerDown: (e: PointerEvent<HTMLElement>) => {
+      e.currentTarget.setPointerCapture(e.pointerId)
+      scrubStart.current = { x: e.clientX, value: alpha * 100 }
+    },
+    onPointerMove: (e: PointerEvent<HTMLElement>) => {
+      const s = scrubStart.current
+      if (s) onAlpha(clamp(Math.round(s.value + e.clientX - s.x), 0, 100) / 100)
+    },
+    onPointerUp: () => {
+      scrubStart.current = null
+    },
+    onPointerCancel: () => {
+      scrubStart.current = null
+    },
+  }
+
   const commitHex = () => {
     const parsed = hexDraft === null ? null : parseHex(hexDraft)
     if (parsed) apply(rgbToHsv(hexToRgb(parsed)))
@@ -51,7 +70,7 @@ export const ColorPicker = ({ color, alpha, onColor, onAlpha }: Props) => {
   const handleAt = (f: number) => ({ left: `calc(${INSET}px + (100% - ${INSET * 2}px) * ${f})` }) as CSSProperties
 
   return (
-    <div className="color-picker" style={{ '--hue': `hsl(${hsv[0]} 100% 50%)`, '--color': hex } as CSSProperties}>
+    <div className="color-picker" style={{ '--hue': `hsl(${hsv[0]} 100% 50%)`, '--color': hex, '--alpha': alpha } as CSSProperties}>
       <div className="color-picker__area" {...area}>
         <span className="color-picker__handle" style={{ left: `${hsv[1] * 100}%`, top: `${(1 - hsv[2]) * 100}%` }} />
       </div>
@@ -78,6 +97,7 @@ export const ColorPicker = ({ color, alpha, onColor, onAlpha }: Props) => {
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         />
         <span className="color-picker__percent">
+          <span className="color-picker__scrub" aria-hidden {...scrub} />
           <input
             className="color-picker__input"
             aria-label="Прозрачность"
