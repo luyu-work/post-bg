@@ -9,10 +9,35 @@
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+  /* крестик выше всех, дальше по порядку появления */
+  z-index: var(--layer, 10);
 }
 
 .icon-button svg {
   display: block;
   width: var(--icon, 20px);
   height: var(--icon, 20px);
+}
+
+/* кнопки под крестиком по очереди выезжают из-под него на свое место за 250ms, при закрытии гаснут сразу */
+.icon-button--reveal {
+  --reveal-delay: calc(var(--reveal-start) + (var(--reveal-index) - 1) * var(--reveal-duration));
+  --layer: calc(10 - var(--reveal-index));
+  opacity: 0;
+  /* на старте кнопка на 40% меньше */
+  scale: 0.6;
+  translate: 0 calc(var(--reveal-index) * -1 * (var(--button) + var(--controls-gap)));
+  pointer-events: none;
+  transition: opacity 100ms ease, translate 100ms ease, scale 100ms ease;
+}
+
+.icon-button--reveal.is-visible {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+  pointer-events: auto;
+  transition:
+    opacity 100ms ease var(--reveal-delay),
+    translate var(--reveal-duration) ease var(--reveal-delay),
+    scale var(--reveal-duration) ease var(--reveal-delay);
 }

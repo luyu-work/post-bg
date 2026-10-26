@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { DiceButton } from './components/DiceButton'
 import { ResetButton } from './components/ResetButton'
 import { SettingsButton } from './components/SettingsButton'
 import { SettingsForm } from './components/SettingsForm'
@@ -24,10 +25,13 @@ export const App = () => {
   const { preset, color } = settings
   const palettes = useMemo(() => (preset === 'custom' ? customPalettes(color) : getPalettes(preset)), [preset, color])
 
-  // выбор пресета генерирует новую раскладку, как и раньше
+  // новая случайная раскладка пятен и шума, настройки не меняются
+  const shuffleScene = () => setShuffle((s) => s + 1)
+
+  // выбор пресета тоже генерирует новую раскладку
   const selectPreset = (name: HueName) => {
     update({ preset: name, color: getAccent(name) })
-    setShuffle((s) => s + 1)
+    shuffleScene()
   }
 
   return (
@@ -36,6 +40,7 @@ export const App = () => {
       <div className={`app__controls${panelOpen ? ' app__controls--shifted' : ''}`}>
         <SettingsButton expanded={panelOpen} onClick={togglePanel} />
         <ResetButton visible={panelOpen} onClick={reset} />
+        <DiceButton visible={panelOpen} onClick={shuffleScene} />
       </div>
       <SettingsPanel open={panelOpen} onClose={closePanel}>
         <SettingsForm key={openCount} settings={settings} onChange={update} onPreset={selectPreset} />

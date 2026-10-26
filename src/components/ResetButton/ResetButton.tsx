@@ -1,7 +1,6 @@
-import { useRef } from 'react'
 import { iconSvgProps } from '../../lib/icon'
+import { spinFrames, useIconAnimation } from '../../lib/iconAnimation'
 import { IconButton } from '../IconButton'
-import './ResetButton.css'
 
 type Props = {
   visible: boolean
@@ -9,23 +8,20 @@ type Props = {
 }
 
 export const ResetButton = ({ visible, onClick }: Props) => {
-  const iconRef = useRef<SVGSVGElement>(null)
-
-  // иконка делает полный оборот против часовой за 300ms, стрелка на ней тоже смотрит против часовой
-  const handleClick = () => {
-    iconRef.current?.animate([{ rotate: '0deg' }, { rotate: '-360deg' }], { duration: 300, easing: 'ease' })
-    onClick()
-  }
+  // стрелка на иконке смотрит против часовой, оборот в ту же сторону
+  const { ref, play } = useIconAnimation<SVGSVGElement>(spinFrames(-1))
 
   return (
     <IconButton
-      className={`reset-button${visible ? ' reset-button--visible' : ''}`}
+      reveal={visible}
+      revealIndex={1}
       aria-label="Сбросить настройки"
-      aria-hidden={!visible}
-      tabIndex={visible ? 0 : -1}
-      onClick={handleClick}
+      onClick={() => {
+        play()
+        onClick()
+      }}
     >
-      <svg ref={iconRef} {...iconSvgProps}>
+      <svg ref={ref} {...iconSvgProps}>
         {/* глиф сжат до размера крестика, обводка увеличена, чтобы толщина осталась прежней */}
         <g transform="translate(12.5 12) scale(0.8) translate(-12 -12)" strokeWidth={2.5}>
           <path d="M1 4v6h6" />

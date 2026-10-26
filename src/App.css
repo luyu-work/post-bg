@@ -1,5 +1,9 @@
 :root {
   --settings-width: 320px;
+  --controls-gap: 8px;
+  /* кнопки появляются после того, как панель выехала и крестик встал на место */
+  --reveal-start: 800ms;
+  --reveal-duration: 250ms;
 }
 
 .app__controls {
@@ -12,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: var(--controls-gap);
 }
 
 /* панель настроек лежит поверх, органы управления отъезжают влево от нее */
