@@ -1,8 +1,8 @@
 /* обе иконки лежат в одной ячейке, меняются анимацией */
 .settings-button__icon {
   grid-area: 1 / 1;
-  width: var(--icon, 16px);
-  height: var(--icon, 16px);
+  width: var(--icon, 20px);
+  height: var(--icon, 20px);
 }
 
 /*

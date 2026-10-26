@@ -1,0 +1,20 @@
+.color-presets {
+  display: flex;
+  justify-content: space-between;
+  /* запас под кольцо выбранного цвета, иначе оно обрезается краем прокручиваемой формы */
+  padding: 0 8px;
+}
+
+.color-presets__item {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.color-presets__item.is-selected {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

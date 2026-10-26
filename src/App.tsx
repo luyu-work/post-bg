@@ -1,11 +1,10 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ResetButton } from './components/ResetButton'
-import { SelectColor } from './components/SelectColor'
 import { SettingsButton } from './components/SettingsButton'
 import { SettingsForm } from './components/SettingsForm'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SquaresGrid } from './components/SquaresGrid'
-import { HUE_OPTIONS, type HueName } from './lib/palettes'
+import { customPalettes, getAccent, getPalettes, type HueName } from './lib/palettes'
 import { useSettings } from './lib/settings'
 import './App.css'
 
@@ -14,24 +13,26 @@ export const App = () => {
   const [panelOpen, setPanelOpen] = useState(false)
   const [shuffle, setShuffle] = useState(0)
   const closePanel = useCallback(() => setPanelOpen(false), [])
-  const reshuffle = useCallback(() => setShuffle((s) => s + 1), [])
 
-  // смена цвета генерирует новую раскладку, как и раньше
-  const changeHue = (hue: HueName) => {
-    update({ hue })
-    reshuffle()
+  // пресет это готовая палитра, свой цвет собирает палитру из выбранного
+  const { preset, color } = settings
+  const palettes = useMemo(() => (preset === 'custom' ? customPalettes(color) : getPalettes(preset)), [preset, color])
+
+  // выбор пресета генерирует новую раскладку, как и раньше
+  const selectPreset = (name: HueName) => {
+    update({ preset: name, color: getAccent(name) })
+    setShuffle((s) => s + 1)
   }
 
   return (
     <>
-      <SquaresGrid hue={settings.hue} params={settings} shuffle={shuffle} />
-      <div className={`app__select${panelOpen ? ' app__select--shifted' : ''}`}>
-        <SelectColor options={HUE_OPTIONS} value={settings.hue} onChange={changeHue} />
+      <SquaresGrid palettes={palettes} alpha={settings.alpha} params={settings} shuffle={shuffle} />
+      <div className={`app__controls${panelOpen ? ' app__controls--shifted' : ''}`}>
         <SettingsButton expanded={panelOpen} onClick={() => setPanelOpen((v) => !v)} />
         <ResetButton visible={panelOpen} onClick={reset} />
       </div>
       <SettingsPanel open={panelOpen} onClose={closePanel}>
-        <SettingsForm settings={settings} onChange={update} />
+        <SettingsForm settings={settings} onChange={update} onPreset={selectPreset} />
       </SettingsPanel>
     </>
   )

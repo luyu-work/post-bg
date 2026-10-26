@@ -2,7 +2,7 @@
   --settings-width: 320px;
 }
 
-.app__select {
+.app__controls {
   transition: right 200ms ease 700ms;
   position: fixed;
   top: 16px;
@@ -15,7 +15,7 @@
 }
 
 /* панель настроек лежит поверх, органы управления отъезжают влево от нее */
-.app__select--shifted {
+.app__controls--shifted {
   transition: right 200ms ease;
   right: calc(12px + var(--settings-width) + 12px);
 }

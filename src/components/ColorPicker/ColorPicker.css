@@ -1,0 +1,116 @@
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* квадрат насыщенности и яркости, оттенок берется из --hue */
+.color-picker__area {
+  position: relative;
+  height: 180px;
+  border-radius: 8px;
+  background:
+    linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, transparent),
+    var(--hue);
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.color-picker__handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.color-picker__handle--track {
+  top: 50%;
+}
+
+.color-picker__sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.color-picker__track {
+  position: relative;
+  height: 12px;
+  border-radius: 6px;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.color-picker__hue {
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+}
+
+/* шахматка под градиентом прозрачности */
+.color-picker__alpha {
+  background:
+    linear-gradient(to right, transparent, var(--color)),
+    conic-gradient(#bdbdbd 25%, #fff 0 50%, #bdbdbd 0 75%, #fff 0) 0 0 / 8px 8px;
+}
+
+.color-picker__fields {
+  display: grid;
+  grid-template-columns: auto 1fr 64px;
+  gap: 8px;
+  align-items: center;
+}
+
+.color-picker__mode {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.color-picker__percent {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  color: #8f8f8f;
+}
+
+.color-picker__input {
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.color-picker__input:focus-visible {
+  box-shadow: 0 0 0 1px var(--color);
+}
+
+/* поле процентов лежит внутри общей плашки, свой фон не нужен, число на 1px выше */
+.color-picker__percent .color-picker__input {
+  width: 3ch;
+  padding: 0;
+  background: transparent;
+  text-align: right;
+  transform: translateY(-1px);
+}
+
+.color-picker__percent .color-picker__input:focus-visible {
+  box-shadow: none;
+}

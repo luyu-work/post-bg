@@ -1,3 +1,5 @@
+import { hexToRgb } from './color-utils'
+
 export type Rgb = [number, number, number]
 export type Palette = Rgb[]
 
@@ -38,4 +40,13 @@ export const getPalettes = (hue: HueName): [Palette, Palette] => {
 export const getAccent = (hue: HueName): string => {
   const list = HUES[hue]
   return list[list.length - 1][3]
+}
+
+// палитра из выбранного цвета: он стоит на яркой ступени, темные ступени это его затемнение, последняя светлее
+export const customPalettes = (hex: string): [Palette, Palette] => {
+  const base = hexToRgb(hex)
+  const dim = (k: number) => base.map((v) => Math.round(v * k)) as Rgb
+  const light = base.map((v) => Math.round(v + (255 - v) * 0.4)) as Rgb
+  const palette: Palette = [dim(0.18), dim(0.4), dim(0.7), base, light]
+  return [palette, palette]
 }

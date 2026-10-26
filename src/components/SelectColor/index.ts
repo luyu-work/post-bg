@@ -1,1 +1,0 @@
-export { SelectColor } from './SelectColor'

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-const BUTTON = 28
-const ICON = 16
+const BUTTON = 32
+const ICON = 20
 
 // размеры в физических пикселях, разница кнопки и иконки четная, иконка встает ровно по центру
 const snap = () => {

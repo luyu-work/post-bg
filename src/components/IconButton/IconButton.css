@@ -1,9 +1,9 @@
 .icon-button {
-  width: var(--button, 28px);
-  height: var(--button, 28px);
+  width: var(--button, 32px);
+  height: var(--button, 32px);
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: 8px;
   display: grid;
   place-items: center;
   background: var(--surface);
@@ -13,6 +13,6 @@
 
 .icon-button svg {
   display: block;
-  width: var(--icon, 16px);
-  height: var(--icon, 16px);
+  width: var(--icon, 20px);
+  height: var(--icon, 20px);
 }

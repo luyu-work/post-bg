@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { HUE_OPTIONS, type HueName } from './palettes'
+import { parseHex } from './color-utils'
+import { getAccent, HUE_OPTIONS, type HueName } from './palettes'
 
 export type SliderKey =
-  | 'brightness'
-  | 'contrast'
-  | 'shift'
-  | 'saturation'
   | 'noise'
   | 'noiseLight'
   | 'blobs'
@@ -31,11 +28,6 @@ export type SliderDef = {
 
 // новая настройка = новая строка здесь, форма, хранение и проверка подхватят ее сами
 export const SLIDERS: SliderDef[] = [
-  { key: 'brightness', label: 'Яркость', group: 'Цвет', min: 0.3, max: 1.6, step: 0.01, def: 1 },
-  { key: 'contrast', label: 'Контраст', group: 'Цвет', min: 0.5, max: 2, step: 0.01, def: 1 },
-  { key: 'shift', label: 'Баланс света', group: 'Цвет', min: -0.3, max: 0.3, step: 0.01, def: 0 },
-  { key: 'saturation', label: 'Насыщенность', group: 'Цвет', min: 0, max: 2, step: 0.01, def: 1 },
-
   { key: 'noise', label: 'Шум', group: 'Шум', min: 0, max: 0.6, step: 0.01, def: 0.14 },
   { key: 'noiseLight', label: 'Шум в светлых', group: 'Шум', min: 0, max: 4, step: 0.1, def: 1.2 },
 
@@ -53,23 +45,29 @@ export const SLIDERS: SliderDef[] = [
 ]
 
 export type Params = Record<SliderKey, number>
-export type Settings = Params & { hue: HueName }
+// цвет это готовый пресет или свой цвет из пипетки, color всегда хранит выбранный цвет, alpha прозрачность клеток
+export type Preset = HueName | 'custom'
+export type Settings = Params & { preset: Preset; color: string; alpha: number }
 
 const DEFAULTS: Settings = {
-  hue: 'green',
+  preset: 'green',
+  color: getAccent('green'),
+  alpha: 1,
   ...(Object.fromEntries(SLIDERS.map((s) => [s.key, s.def])) as Params),
 }
 
 const KEY = 'post-bg:settings'
 
-const isHue = (v: unknown): v is HueName => HUE_OPTIONS.some((o) => o.value === v)
+const isPreset = (v: unknown): v is Preset => v === 'custom' || HUE_OPTIONS.some((o) => o.value === v)
 
 // битые или устаревшие значения заменяются дефолтом, остальные поля сохраняются
 const load = (): Settings => {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Record<string, unknown>
     const next = { ...DEFAULTS }
-    if (isHue(raw.hue)) next.hue = raw.hue
+    if (isPreset(raw.preset)) next.preset = raw.preset
+    if (typeof raw.color === 'string') next.color = parseHex(raw.color) ?? next.color
+    if (typeof raw.alpha === 'number' && Number.isFinite(raw.alpha)) next.alpha = Math.min(Math.max(raw.alpha, 0), 1)
     for (const s of SLIDERS) {
       const v = raw[s.key]
       if (typeof v === 'number' && Number.isFinite(v)) next[s.key] = Math.min(Math.max(v, s.min), s.max)

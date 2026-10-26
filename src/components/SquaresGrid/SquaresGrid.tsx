@@ -1,20 +1,21 @@
 import { memo, useLayoutEffect, useMemo, useRef, type CSSProperties } from 'react'
 import { colorAt } from '../../lib/color'
 import { createScene, evaluateField } from '../../lib/field'
-import { getPalettes, type HueName } from '../../lib/palettes'
+import type { Palette } from '../../lib/palettes'
 import type { Params } from '../../lib/settings'
 import { useGridLayout } from './useGridLayout'
 import './SquaresGrid.css'
 
 type Props = {
-  hue: HueName
+  palettes: [Palette, Palette]
+  alpha: number
   params: Params
   // меняется, когда нужна новая случайная раскладка пятен и шума
   shuffle: number
 }
 
 // memo, чтобы открытие настроек не перерисовывало тысячи клеток
-export const SquaresGrid = memo(({ hue, params, shuffle }: Props) => {
+export const SquaresGrid = memo(({ palettes, alpha, params, shuffle }: Props) => {
   const { width, height, gap, cols, rows, offX, offY } = useGridLayout(params)
 
   // случайная часть живет отдельно от слайдеров, поэтому они двигают картинку без скачков
@@ -22,10 +23,9 @@ export const SquaresGrid = memo(({ hue, params, shuffle }: Props) => {
   const scene = useMemo(() => createScene(cols, rows), [cols, rows, shuffle])
 
   const colors = useMemo(() => {
-    const palettes = getPalettes(hue)
     const { vals, mixes } = evaluateField(scene, cols, rows, params)
-    return Array.from(vals, (v, i) => colorAt(palettes, v, mixes[i], scene.noise[i], params))
-  }, [scene, hue, cols, rows, params])
+    return Array.from(vals, (v, i) => colorAt(palettes, v, mixes[i], scene.noise[i], params, alpha))
+  }, [scene, palettes, alpha, cols, rows, params])
 
   // цвета пишутся прямо в DOM, без перерисовки тысяч клеток React, иначе слайдеры тормозят
   const gridRef = useRef<HTMLDivElement>(null)
