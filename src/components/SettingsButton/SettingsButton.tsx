@@ -1,0 +1,48 @@
+import { useEffect, useState, type CSSProperties } from 'react'
+import './SettingsButton.css'
+
+const BUTTON = 28
+const ICON = 16
+
+// размеры в физических пикселях, разница кнопки и иконки четная, иконка встает ровно по центру
+const snap = () => {
+  const dpr = window.devicePixelRatio || 1
+  const button = Math.round(BUTTON * dpr)
+  let icon = Math.round(ICON * dpr)
+  if ((button - icon) % 2) icon += 1
+  return { button: button / dpr, icon: icon / dpr }
+}
+
+const useSnappedSize = () => {
+  const [size, setSize] = useState(snap)
+  useEffect(() => {
+    const onResize = () => setSize(snap())
+    addEventListener('resize', onResize)
+    return () => removeEventListener('resize', onResize)
+  }, [])
+  return size
+}
+
+type Props = { onClick?: () => void }
+
+export const SettingsButton = ({ onClick }: Props) => {
+  const { button, icon } = useSnappedSize()
+  const style = { '--button': `${button}px`, '--icon': `${icon}px` } as CSSProperties
+
+  return (
+    <button type="button" className="settings-button" style={style} aria-label="Настройки" onClick={onClick}>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+    </button>
+  )
+}

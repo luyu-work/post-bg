@@ -1,0 +1,23 @@
+.settings-button {
+  width: var(--button, 28px);
+  height: var(--button, 28px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #151515;
+  color: #fff;
+  cursor: pointer;
+}
+
+.settings-button svg {
+  width: var(--icon, 16px);
+  height: var(--icon, 16px);
+}
+
+/* толщина линии в экранных пикселях, не зависит от размера иконки */
+.settings-button svg * {
+  vector-effect: non-scaling-stroke;
+}

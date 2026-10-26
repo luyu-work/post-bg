@@ -49,6 +49,7 @@
   top: 32px;
   left: 0;
   right: 0;
+  z-index: 1;
   padding: 4px;
   border-radius: 14px;
   background: rgba(21, 21, 21, 0.8);
@@ -56,6 +57,7 @@
   backdrop-filter: blur(16px) saturate(1.2);
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .select-color__option {
@@ -72,11 +74,11 @@
 }
 
 .select-color__option:hover {
-  background: rgba(21, 21, 21, 0.04);
+  background: rgba(255, 255, 255, 0.04);
   color: #fff;
 }
 
 .select-color__option.is-selected {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
