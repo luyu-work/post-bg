@@ -83,6 +83,11 @@ export const evaluateField = (scene: Scene, cols: number, rows: number, p: Param
     }
   })
 
+  // дальше этого расстояния пятно меньше 0.1% вклада, такие клетки пропускаются без тригонометрии
+  const maxWob = 1 + p.wobble * 0.42
+  const reach = Math.pow(7 / 1.5, 1 / p.edgeSharp) * maxWob
+  const reach2 = reach * reach
+
   const vals = new Float32Array(cols * rows)
   const mixes = new Float32Array(cols * rows)
   for (let i = 0; i < vals.length; i++) {
@@ -96,6 +101,7 @@ export const evaluateField = (scene: Scene, cols: number, rows: number, p: Param
       const dy = y - b.y
       const u = (dx * b.c + dy * b.s) / b.rx
       const v = (-dx * b.s + dy * b.c) / b.ry
+      if (u * u + v * v > reach2) continue
       const th = Math.atan2(v, u)
       const wob =
         1 +
