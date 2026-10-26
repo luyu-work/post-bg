@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { ResetButton } from './components/ResetButton'
 import { SelectColor } from './components/SelectColor'
 import { SettingsButton } from './components/SettingsButton'
 import { SettingsForm } from './components/SettingsForm'
@@ -27,9 +28,10 @@ export const App = () => {
       <div className={`app__select${panelOpen ? ' app__select--shifted' : ''}`}>
         <SelectColor options={HUE_OPTIONS} value={settings.hue} onChange={changeHue} />
         <SettingsButton expanded={panelOpen} onClick={() => setPanelOpen((v) => !v)} />
+        <ResetButton visible={panelOpen} onClick={reset} />
       </div>
       <SettingsPanel open={panelOpen} onClose={closePanel}>
-        <SettingsForm settings={settings} onChange={update} onShuffle={reshuffle} onReset={reset} />
+        <SettingsForm settings={settings} onChange={update} />
       </SettingsPanel>
     </>
   )

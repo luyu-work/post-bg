@@ -1,33 +1,42 @@
 .settings-form {
   height: 100%;
-  margin-right: -8px;
-  padding-right: 8px;
+  /* полоса прокрутки уходит в отступ панели и стоит по центру между контентом и краем */
+  margin-right: -24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #3a3a3a transparent;
 }
 
-.settings-form__actions {
-  display: flex;
-  gap: 8px;
+/* дорожка 24px, ползунок 4px по центру за счет прозрачной рамки */
+.settings-form::-webkit-scrollbar {
+  width: 24px;
 }
 
-.settings-form__button {
-  height: 28px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  font: inherit;
-  cursor: pointer;
+.settings-form::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.settings-form__button:hover {
+.settings-form::-webkit-scrollbar-thumb {
+  /* рамка только по бокам, чтобы ползунок шел от верхнего до нижнего отступа панели без вертикальных зазоров */
+  border-style: solid;
+  border-color: transparent;
+  border-width: 0 10px;
+  /* 12px по горизонтали минус рамка 10px дает круглые концы радиусом 2px у ползунка шириной 4px */
+  border-radius: 12px / 2px;
   background: rgba(255, 255, 255, 0.12);
+  background-clip: padding-box;
+}
+
+.settings-form::-webkit-scrollbar-button {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .settings-form {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  }
 }
 
 .settings-form__group {

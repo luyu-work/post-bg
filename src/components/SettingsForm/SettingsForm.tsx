@@ -7,23 +7,12 @@ import './SettingsForm.css'
 type Props = {
   settings: Settings
   onChange: (patch: Partial<Settings>) => void
-  onShuffle: () => void
-  onReset: () => void
 }
 
 const GROUPS = [...new Set(SLIDERS.map((s) => s.group))]
 
-export const SettingsForm = ({ settings, onChange, onShuffle, onReset }: Props) => (
+export const SettingsForm = ({ settings, onChange }: Props) => (
   <div className="settings-form" style={{ '--accent': getAccent(settings.hue) } as CSSProperties}>
-    <div className="settings-form__actions">
-      <button type="button" className="settings-form__button" onClick={onShuffle}>
-        Перемешать
-      </button>
-      <button type="button" className="settings-form__button" onClick={onReset}>
-        Сбросить
-      </button>
-    </div>
-
     {GROUPS.map((group) => (
       <section key={group} className="settings-form__group">
         <h3 className="settings-form__title">{group}</h3>

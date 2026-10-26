@@ -94,8 +94,8 @@ export const useSettings = () => {
   useEffect(() => save(settings), [settings])
 
   const update = useCallback((patch: Partial<Settings>) => setSettings((prev) => ({ ...prev, ...patch })), [])
-  // сброс слайдеров, выбранный цвет остается
-  const reset = useCallback(() => setSettings((prev) => ({ ...DEFAULTS, hue: prev.hue })), [])
+  // сброс всего, включая выбранный цвет
+  const reset = useCallback(() => setSettings(DEFAULTS), [])
 
   return { settings, update, reset }
 }
