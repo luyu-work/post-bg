@@ -25,13 +25,17 @@ export const HUE_OPTIONS: { value: HueName; label: string }[] = [
   { value: 'yellow', label: 'Желтый' },
 ]
 
-const DIM = 1 // яркость цвета, 1 = исходная палитра
-
 const parse = (hex: readonly string[]): Palette =>
-  hex.map((h) => [1, 3, 5].map((i) => Math.round(parseInt(h.slice(i, i + 2), 16) * DIM)) as Rgb)
+  hex.map((h) => [1, 3, 5].map((i) => Math.round(parseInt(h.slice(i, i + 2), 16))) as Rgb)
 
 // у однотонных оттенков обе палитры совпадают
 export const getPalettes = (hue: HueName): [Palette, Palette] => {
   const list = HUES[hue]
   return [parse(list[0]), parse(list[list.length - 1])]
+}
+
+// цвет акцентов интерфейса, яркая ступень выбранного оттенка
+export const getAccent = (hue: HueName): string => {
+  const list = HUES[hue]
+  return list[list.length - 1][3]
 }

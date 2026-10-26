@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-import { computeLayout, type GridLayout } from '../../lib/layout'
+import { useEffect, useMemo, useState } from 'react'
+import { computeLayout, type GridLayout, type LayoutOptions } from '../../lib/layout'
 
-// при ресайзе всегда отдается новый объект, поле пятен пересоздается
-export const useGridLayout = (): GridLayout => {
-  const [layout, setLayout] = useState(computeLayout)
+// раскладка пересчитывается при ресайзе и при движении слайдеров сетки
+export const useGridLayout = ({ cellSize, gap, pad }: LayoutOptions): GridLayout => {
+  const [viewport, setViewport] = useState(0)
 
   useEffect(() => {
     let t: number
     const onResize = () => {
       clearTimeout(t)
-      t = window.setTimeout(() => setLayout(computeLayout()), 100)
+      t = window.setTimeout(() => setViewport((v) => v + 1), 100)
     }
     addEventListener('resize', onResize)
     return () => {
@@ -18,5 +18,6 @@ export const useGridLayout = (): GridLayout => {
     }
   }, [])
 
-  return layout
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => computeLayout({ cellSize, gap, pad }), [cellSize, gap, pad, viewport])
 }

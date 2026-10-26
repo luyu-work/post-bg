@@ -1,0 +1,44 @@
+.settings-form {
+  height: 100%;
+  margin-right: -8px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a transparent;
+}
+
+.settings-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-form__button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.settings-form__button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.settings-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-form__title {
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  line-height: 20px;
+}

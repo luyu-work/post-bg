@@ -1,15 +1,20 @@
 import type { Palette } from './palettes'
+import type { Params } from './settings'
 
-const NOISE = 0.14 // амплитуда шума в темных местах
-const NOISE_LIGHT_BOOST = 1.2 // во сколько раз шум усиливается к светлому краю, светлые ступени ближе друг к другу
+const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
-// t в 0..1 -> плавный цвет внутри палитры, mix 0..1 смешивает палитры
-export const colorAt = ([pa, pb]: [Palette, Palette], t: number, mix: number, noise: number): string => {
-  const p = Math.min(Math.max(t + noise * NOISE * (1 + NOISE_LIGHT_BOOST * t), 0), 1) * 4
-  const i = Math.min(Math.floor(p), 3)
-  const f = p - i
+// t в 0..1 -> плавный цвет внутри палитры, mix 0..1 смешивает палитры, noise в -0.5..0.5
+export const colorAt = ([pa, pb]: [Palette, Palette], t: number, mix: number, noise: number, p: Params): string => {
+  // контраст и баланс света двигают яркость вокруг середины
+  const tone = (t - 0.5) * p.contrast + 0.5 + p.shift
+  // шум усиливается к светлому краю, светлые ступени палитры ближе друг к другу
+  const pos = clamp(tone + noise * p.noise * (1 + p.noiseLight * tone), 0, 1) * 4
+  const i = Math.min(Math.floor(pos), 3)
+  const f = pos - i
   const at = (pal: Palette) => pal[i].map((v, k) => v + (pal[i + 1][k] - v) * f)
   const a = at(pa)
   const b = at(pb)
-  return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * mix)).join(',')})`
+  const rgb = a.map((v, k) => (v + (b[k] - v) * mix) * p.brightness)
+  const lum = 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]
+  return `rgb(${rgb.map((v) => Math.round(clamp(lum + (v - lum) * p.saturation, 0, 255))).join(',')})`
 }

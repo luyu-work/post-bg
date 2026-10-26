@@ -1,5 +1,8 @@
-const GAP = 2
-const PAD = 2
+export type LayoutOptions = {
+  cellSize: number
+  gap: number
+  pad: number
+}
 
 export type GridLayout = {
   width: number
@@ -12,10 +15,10 @@ export type GridLayout = {
 }
 
 // все размеры считаются в физических пикселях, иначе при дробном масштабе экрана зазоры плывут
-export const computeLayout = (): GridLayout => {
+export const computeLayout = (o: LayoutOptions): GridLayout => {
   const dpr = window.devicePixelRatio || 1
-  const gap = Math.max(1, Math.round(GAP * dpr))
-  const pad = Math.round(PAD * dpr)
+  const gap = Math.max(1, Math.round(o.gap * dpr))
+  const pad = Math.round(o.pad * dpr)
   const w = Math.floor(innerWidth * dpr) - pad * 2
   const h = Math.floor(innerHeight * dpr) - pad * 2
 
@@ -25,10 +28,10 @@ export const computeLayout = (): GridLayout => {
     return { n, left: total + gap - n * (sz + gap) }
   }
 
-  // ширина и высота клетки могут отличаться на 1 физический пиксель, это на глаз незаметно,
-  // зато остаток по обеим осям становится минимальным и поля одинаковые
-  const min = Math.round(14 * dpr)
-  const max = Math.round(22 * dpr)
+  // размер клетки подбирается рядом с заданным, чтобы остаток по обеим осям был минимальным,
+  // ширина и высота могут отличаться на 1 физический пиксель, это на глаз незаметно
+  const min = Math.max(2, Math.round((o.cellSize - 4) * dpr))
+  const max = Math.round((o.cellSize + 4) * dpr)
   let best: { sx: number; sy: number; cols: number; rows: number; leftX: number; leftY: number; cost: number } | null = null
   for (let sx = min; sx <= max; sx++) {
     for (let sy = sx - 1; sy <= sx + 1; sy++) {
