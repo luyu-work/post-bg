@@ -3,8 +3,9 @@ import { ColorPicker } from '../ColorPicker'
 import { ColorPresets } from '../ColorPresets'
 import { Section } from '../Section'
 import { Slider } from '../Slider'
+import { Switch } from '../Switch'
 import type { HueName } from '../../lib/palettes'
-import { SLIDERS, type Settings } from '../../lib/settings'
+import { GROUP_ANIMATION, SLIDERS, type Settings } from '../../lib/settings'
 import './SettingsForm.css'
 
 type Props = {
@@ -29,7 +30,11 @@ export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
 
     {GROUPS.map((group) => (
       <Section key={group} title={group}>
-        {SLIDERS.filter((s) => s.group === group).map((s) => (
+        {group === GROUP_ANIMATION && (
+          <Switch label="Включить анимацию" checked={settings.animate} onChange={(animate) => onChange({ animate })} />
+        )}
+        {/* пока анимация выключена, в разделе виден только свитч */}
+        {SLIDERS.filter((s) => s.group === group && (group !== GROUP_ANIMATION || settings.animate)).map((s) => (
           <Slider
             key={s.key}
             label={s.label}

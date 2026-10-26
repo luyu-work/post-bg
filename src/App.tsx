@@ -36,7 +36,7 @@ export const App = () => {
 
   return (
     <>
-      <SquaresGrid palettes={palettes} alpha={settings.alpha} params={settings} shuffle={shuffle} />
+      <SquaresGrid palettes={palettes} alpha={settings.alpha} params={settings} shuffle={shuffle} animate={settings.animate} />
       <div className={`app__controls${panelOpen ? ' app__controls--shifted' : ''}`}>
         <SettingsButton expanded={panelOpen} onClick={togglePanel} />
         <ResetButton visible={panelOpen} onClick={reset} />

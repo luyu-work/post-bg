@@ -1,0 +1,48 @@
+.switch {
+  --track-w: 40px;
+  --track-h: 24px;
+  --thumb: 16px;
+  --pad: calc((var(--track-h) - var(--thumb)) / 2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.switch__track {
+  width: var(--track-w);
+  height: var(--track-h);
+  padding: var(--pad);
+  border-radius: calc(var(--track-h) / 2);
+  background: var(--fill);
+  transition: background 200ms ease;
+}
+
+.switch__thumb {
+  display: block;
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  background: var(--text);
+  transition: translate 200ms ease;
+}
+
+.switch[aria-checked='true'] .switch__track {
+  background: var(--accent, #1fdc8c);
+}
+
+.switch[aria-checked='true'] .switch__thumb {
+  translate: calc(var(--track-w) - var(--thumb) - var(--pad) * 2) 0;
+}
+
+.switch:focus-visible .switch__track {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}

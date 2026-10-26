@@ -14,6 +14,15 @@ export type SliderKey =
   | 'gap'
   | 'radius'
   | 'pad'
+  | 'speed'
+  | 'chaos'
+  | 'drift'
+  | 'spin'
+  | 'breathe'
+  | 'shimmer'
+
+// раздел с общим свитчем анимации, форма ставит его первым в этом разделе
+export const GROUP_ANIMATION = 'Анимация'
 
 export type SliderDef = {
   key: SliderKey
@@ -40,17 +49,25 @@ export const SLIDERS: SliderDef[] = [
   { key: 'gap', label: 'Зазор', group: 'Сетка', min: 1, max: 8, step: 1, def: 2 },
   { key: 'radius', label: 'Скругление', group: 'Сетка', min: 0, max: 9, step: 0.5, def: 2 },
   { key: 'pad', label: 'Отступ от края', group: 'Сетка', min: 0, max: 40, step: 1, def: 2 },
+
+  { key: 'speed', label: 'Скорость', group: GROUP_ANIMATION, min: 0.1, max: 3, step: 0.1, def: 1 },
+  { key: 'chaos', label: 'Хаотичность', group: GROUP_ANIMATION, min: 0, max: 2, step: 0.05, def: 1 },
+  { key: 'drift', label: 'Смещение пятен', group: GROUP_ANIMATION, min: 0, max: 0.4, step: 0.01, def: 0.14 },
+  { key: 'spin', label: 'Поворот пятен', group: GROUP_ANIMATION, min: 0, max: 1.5, step: 0.05, def: 0.45 },
+  { key: 'breathe', label: 'Дыхание пятен', group: GROUP_ANIMATION, min: 0, max: 0.3, step: 0.01, def: 0.06 },
+  { key: 'shimmer', label: 'Мерцание клеток', group: GROUP_ANIMATION, min: 0, max: 1, step: 0.05, def: 0 },
 ]
 
 export type Params = Record<SliderKey, number>
 // цвет это готовый пресет или свой цвет из color-picker, color всегда хранит выбранный цвет, alpha прозрачность клеток
 export type Preset = HueName | 'custom'
-export type Settings = Params & { preset: Preset; color: string; alpha: number }
+export type Settings = Params & { preset: Preset; color: string; alpha: number; animate: boolean }
 
 const DEFAULTS: Settings = {
   preset: 'green',
   color: getAccent('green'),
   alpha: 1,
+  animate: false,
   ...(Object.fromEntries(SLIDERS.map((s) => [s.key, s.def])) as Params),
 }
 
@@ -66,6 +83,7 @@ const load = (): Settings => {
     if (isPreset(raw.preset)) next.preset = raw.preset
     if (typeof raw.color === 'string') next.color = parseHex(raw.color) ?? next.color
     if (typeof raw.alpha === 'number' && Number.isFinite(raw.alpha)) next.alpha = Math.min(Math.max(raw.alpha, 0), 1)
+    if (typeof raw.animate === 'boolean') next.animate = raw.animate
     for (const s of SLIDERS) {
       const v = raw[s.key]
       if (typeof v === 'number' && Number.isFinite(v)) next[s.key] = Math.min(Math.max(v, s.min), s.max)

@@ -5,6 +5,19 @@ const BASE = 0.12
 
 const MAX_BLOBS = 8
 
+// угловые частоты движения в радианах в секунду, периоды от 15 до 60 секунд, размах задают слайдеры
+const MOTION = {
+  driftSpeed: 0.21,
+  spinSpeed: 0.1,
+  breatheSpeed: 0.17,
+  wobbleSpeed: [0.3, -0.23, 0.37],
+  shimmerSpeed: 1.1,
+} as const
+
+// мерцание клетки, фаза берется из самого шума, поэтому соседи мерцают вразнобой
+export const shimmerNoise = (noise: number, amount: number, time: number) =>
+  amount ? noise * (1 - amount) + amount * 0.5 * Math.sin(time * MOTION.shimmerSpeed + noise * 50) : noise
+
 // случайная часть пятна, размеры и позиция нормированы, чтобы слайдеры не требовали новой случайности
 type BlobSeed = {
   x: number
@@ -45,23 +58,30 @@ export const createScene = (cols: number, rows: number): Scene => {
 
 export type Field = { vals: Float32Array; mixes: Float32Array }
 
-// пятна с волнообразно изогнутыми краями, считается заново при любом движении слайдера
-export const evaluateField = (scene: Scene, cols: number, rows: number, p: Params): Field => {
+// пятна с волнообразно изогнутыми краями, считается заново при любом движении слайдера,
+// time в секундах двигает пятна, 0 дает неподвижную картинку
+export const evaluateField = (scene: Scene, cols: number, rows: number, p: Params, time = 0): Field => {
   const m = Math.min(cols, rows)
   const { first } = scene
-  const blobs = scene.blobs.slice(0, Math.round(p.blobs)).map((b, k) => ({
-    x: b.x * cols,
-    y: b.y * rows,
-    rx: m * b.kx * p.blobSize,
-    ry: m * b.ky * p.blobSize,
-    c: Math.cos(b.rot),
-    s: Math.sin(b.rot),
-    p1: b.p1,
-    p2: b.p2,
-    p3: b.p3,
-    a: b.a,
-    pal: (first + k) % 2,
-  }))
+  const blobs = scene.blobs.slice(0, Math.round(p.blobs)).map((b, k) => {
+    // у каждого пятна свой темп из его случайных параметров, хаотичность растягивает разброс, при 0 пятна идут в унисон
+    const pace = 1 + p.chaos * (b.kx - 0.52) * 2
+    const rot = b.rot + p.spin * Math.sin(time * MOTION.spinSpeed * pace + b.p2)
+    const size = p.blobSize * (1 + p.breathe * Math.sin(time * MOTION.breatheSpeed * pace + b.p3))
+    return {
+      x: b.x * cols + m * p.drift * Math.sin(time * MOTION.driftSpeed * pace + b.p1),
+      y: b.y * rows + m * p.drift * Math.cos(time * MOTION.driftSpeed * pace * 0.8 + b.p2),
+      rx: m * b.kx * size,
+      ry: m * b.ky * size,
+      c: Math.cos(rot),
+      s: Math.sin(rot),
+      p1: b.p1 + time * MOTION.wobbleSpeed[0] * p.chaos,
+      p2: b.p2 + time * MOTION.wobbleSpeed[1] * p.chaos,
+      p3: b.p3 + time * MOTION.wobbleSpeed[2] * p.chaos,
+      a: b.a,
+      pal: (first + k) % 2,
+    }
+  })
 
   const vals = new Float32Array(cols * rows)
   const mixes = new Float32Array(cols * rows)
