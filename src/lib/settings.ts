@@ -16,9 +16,9 @@ export type SliderKey =
   | 'pad'
   | 'speed'
   | 'chaos'
-  | 'drift'
   | 'spin'
   | 'breathe'
+  | 'jelly'
   | 'shimmer'
 
 // раздел с общим свитчем анимации, форма ставит его первым в этом разделе
@@ -51,10 +51,10 @@ export const SLIDERS: SliderDef[] = [
   { key: 'pad', label: 'Отступ от края', group: 'Сетка', min: 0, max: 40, step: 1, def: 2 },
 
   { key: 'speed', label: 'Скорость', group: GROUP_ANIMATION, min: 0.1, max: 3, step: 0.1, def: 1 },
-  { key: 'chaos', label: 'Хаотичность', group: GROUP_ANIMATION, min: 0, max: 2, step: 0.05, def: 1 },
-  { key: 'drift', label: 'Смещение пятен', group: GROUP_ANIMATION, min: 0, max: 0.4, step: 0.01, def: 0.14 },
+  { key: 'chaos', label: 'Хаотичность края', group: GROUP_ANIMATION, min: 0, max: 2, step: 0.05, def: 1 },
   { key: 'spin', label: 'Поворот пятен', group: GROUP_ANIMATION, min: 0, max: 1.5, step: 0.05, def: 0.45 },
   { key: 'breathe', label: 'Дыхание пятен', group: GROUP_ANIMATION, min: 0, max: 0.3, step: 0.01, def: 0.06 },
+  { key: 'jelly', label: 'Упругость пятен', group: GROUP_ANIMATION, min: 0, max: 3, step: 0.05, def: 1 },
   { key: 'shimmer', label: 'Мерцание клеток', group: GROUP_ANIMATION, min: 0, max: 1, step: 0.05, def: 0 },
 ]
 

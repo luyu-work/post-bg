@@ -1,3 +1,4 @@
+import type { World } from './physics'
 import type { Params } from './settings'
 
 // яркость фона вне пятен, отдельной настройки нет, ее задает цвет
@@ -7,7 +8,6 @@ const MAX_BLOBS = 8
 
 // угловые частоты движения в радианах в секунду, периоды от 15 до 60 секунд, размах задают слайдеры
 const MOTION = {
-  driftSpeed: 0.21,
   spinSpeed: 0.1,
   breatheSpeed: 0.17,
   wobbleSpeed: [0.3, -0.23, 0.37],
@@ -59,27 +59,32 @@ export const createScene = (cols: number, rows: number): Scene => {
 export type Field = { vals: Float32Array; mixes: Float32Array }
 
 // пятна с волнообразно изогнутыми краями, считается заново при любом движении слайдера,
-// time в секундах двигает пятна, 0 дает неподвижную картинку
-export const evaluateField = (scene: Scene, cols: number, rows: number, p: Params, time = 0): Field => {
+// положение и форма пятен берутся из мира физики, time в секундах двигает края
+export const evaluateField = (world: World, cols: number, rows: number, p: Params, time = 0): Field => {
   const m = Math.min(cols, rows)
-  const { first } = scene
-  const blobs = scene.blobs.slice(0, Math.round(p.blobs)).map((b, k) => {
+  const { first } = world
+  const blobs = world.bodies.map((b) => {
     // у каждого пятна свой темп из его случайных параметров, хаотичность растягивает разброс, при 0 пятна идут в унисон
-    const pace = 1 + p.chaos * (b.kx - 0.52) * 2
+    const pace = 1 + p.chaos * (b.r - 0.52) * 2
     const rot = b.rot + p.spin * Math.sin(time * MOTION.spinSpeed * pace + b.p2)
     const size = p.blobSize * (1 + p.breathe * Math.sin(time * MOTION.breatheSpeed * pace + b.p3))
+    // вытягивание вдоль движения сохраняет площадь пятна
+    // упругость слайдера усиливает или гасит покачивание формы
+    const stretch = b.stretch * p.jelly
+    const rx = m * b.r * size * (1 + stretch)
+    const ry = (m * b.r * b.aspect * size) / Math.sqrt(1 + stretch)
     return {
-      x: b.x * cols + m * p.drift * Math.sin(time * MOTION.driftSpeed * pace + b.p1),
-      y: b.y * rows + m * p.drift * Math.cos(time * MOTION.driftSpeed * pace * 0.8 + b.p2),
-      rx: m * b.kx * size,
-      ry: m * b.ky * size,
+      x: b.x * m,
+      y: b.y * m,
+      rx,
+      ry,
       c: Math.cos(rot),
       s: Math.sin(rot),
       p1: b.p1 + time * MOTION.wobbleSpeed[0] * p.chaos,
       p2: b.p2 + time * MOTION.wobbleSpeed[1] * p.chaos,
       p3: b.p3 + time * MOTION.wobbleSpeed[2] * p.chaos,
       a: b.a,
-      pal: (first + k) % 2,
+      pal: b.pal,
     }
   })
 

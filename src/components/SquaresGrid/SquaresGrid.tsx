@@ -1,6 +1,7 @@
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, type CSSProperties } from 'react'
 import { colorAt } from '../../lib/color'
 import { createScene, evaluateField, shimmerNoise, type Field } from '../../lib/field'
+import { createWorld, stepWorld, syncCount } from '../../lib/physics'
 import type { Palette } from '../../lib/palettes'
 import { SLIDERS, type Params } from '../../lib/settings'
 import { useGridLayout } from './useGridLayout'
@@ -30,6 +31,10 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scene = useMemo(() => createScene(cols, rows), [cols, rows, shuffle])
 
+  // пятна как тела с физикой, раскладка из сцены, дальше их двигает только анимация
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const world = useMemo(() => createWorld(scene, cols, rows, params.blobs), [scene])
+
   // params приходит целым объектом настроек, поэтому ключ из чисел слайдеров не дает пересчитывать поле при смене цвета и прозрачности
   const paramsKey = SLIDERS.map((s) => params[s.key]).join(',')
 
@@ -44,7 +49,12 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
 
   // неподвижная картинка: поле считается только от слайдеров и раскладки, прозрачность и палитра его не трогают
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const field = useMemo(() => evaluateField(scene, cols, rows, params, timeRef.current), [scene, cols, rows, paramsKey, animate])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const field = useMemo(() => {
+    syncCount(world, scene, params.blobs)
+    return evaluateField(world, cols, rows, params, timeRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [world, scene, cols, rows, paramsKey, animate])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const colors = useMemo(() => colorsOf(field, timeRef.current), [field, palettes, alpha, scene, paramsKey])
 
@@ -78,15 +88,17 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame)
       if (now - last < interval) return
-      timeRef.current += Math.min((now - last) / 1000, MAX_STEP) * params.speed
+      const dt = Math.min((now - last) / 1000, MAX_STEP) * params.speed
+      timeRef.current += dt
       last = now
-      paint(colorsOf(evaluateField(scene, cols, rows, params, timeRef.current), timeRef.current))
+      stepWorld(world, scene, dt, params)
+      paint(colorsOf(evaluateField(world, cols, rows, params, timeRef.current), timeRef.current))
       interval = Math.max(1000 / FPS, (performance.now() - now) * LOAD_RATIO)
     }
     raf = requestAnimationFrame(frame)
     return () => cancelAnimationFrame(raf)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animate, scene, palettes, alpha, cols, rows, paramsKey])
+  }, [animate, world, scene, palettes, alpha, cols, rows, paramsKey])
 
   const style: CSSProperties = {
     '--cell-w': `${width}px`,
