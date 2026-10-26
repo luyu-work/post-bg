@@ -1,0 +1,82 @@
+.select-color {
+  position: relative;
+  display: inline-block;
+  font: 500 14px/18px 'Onest', system-ui, sans-serif;
+}
+
+.select-color__chip {
+  width: 100%;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #151515;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.select-color__labels {
+  display: grid;
+}
+
+.select-color__labels > span {
+  grid-area: 1 / 1;
+  text-align: left;
+  visibility: hidden;
+}
+
+.select-color__labels > .is-current {
+  visibility: visible;
+}
+
+.select-color__arrow {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.15s;
+}
+
+.select-color--open .select-color__arrow {
+  transform: rotate(180deg);
+}
+
+.select-color__menu {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  right: 0;
+  padding: 4px;
+  border-radius: 14px;
+  background: rgba(21, 21, 21, 0.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.select-color__option {
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 10px;
+  text-align: left;
+  white-space: nowrap;
+  background: transparent;
+  color: #d0d0d0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.select-color__option:hover {
+  background: rgba(21, 21, 21, 0.04);
+  color: #fff;
+}
+
+.select-color__option.is-selected {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}

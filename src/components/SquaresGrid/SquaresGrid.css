@@ -1,0 +1,13 @@
+.squares-grid {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  justify-content: start;
+  align-content: start;
+}
+
+.squares-grid__cell {
+  width: var(--size);
+  height: var(--size);
+  border-radius: 2px;
+}
