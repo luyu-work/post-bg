@@ -1,5 +1,8 @@
 import type { Params } from './settings'
 
+// яркость фона вне пятен, отдельной настройки нет, ее задает цвет
+const BASE = 0.12
+
 const MAX_BLOBS = 8
 
 // случайная часть пятна, размеры и позиция нормированы, чтобы слайдеры не требовали новой случайности
@@ -85,7 +88,7 @@ export const evaluateField = (scene: Scene, cols: number, rows: number, p: Param
       wpal += g * b.pal
     }
     mixes[i] = wpal / wsum
-    vals[i] = p.base + p.power * (1 - rest)
+    vals[i] = BASE + p.power * (1 - rest)
   }
   return { vals, mixes }
 }

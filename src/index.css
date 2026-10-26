@@ -3,6 +3,14 @@
   --surface: #151515;
   --glass-bg: rgba(21, 21, 21, 0.8);
   --glass-blur: blur(16px) saturate(1.2);
+  --text: #fff;
+  --text-muted: #8f8f8f;
+  --fill: rgba(255, 255, 255, 0.08);
+  --stroke: rgba(255, 255, 255, 0.12);
+  --radius-control: 8px;
+  --radius-card: 16px;
+  /* шахматка под прозрачным цветом */
+  --checker: conic-gradient(#bdbdbd 25%, #fff 0 50%, #bdbdbd 0 75%, #fff 0) 0 0 / 8px 8px;
 }
 
 * {
@@ -16,4 +24,6 @@ body {
   height: 100%;
   background: #080808;
   overflow: hidden;
+  color: var(--text);
+  font: 500 14px/18px 'Onest', system-ui, sans-serif;
 }

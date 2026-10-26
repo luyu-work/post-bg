@@ -2,7 +2,7 @@ import { memo, useLayoutEffect, useMemo, useRef, type CSSProperties } from 'reac
 import { colorAt } from '../../lib/color'
 import { createScene, evaluateField } from '../../lib/field'
 import type { Palette } from '../../lib/palettes'
-import type { Params } from '../../lib/settings'
+import { SLIDERS, type Params } from '../../lib/settings'
 import { useGridLayout } from './useGridLayout'
 import './SquaresGrid.css'
 
@@ -22,10 +22,18 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle }: Props) =>
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scene = useMemo(() => createScene(cols, rows), [cols, rows, shuffle])
 
-  const colors = useMemo(() => {
-    const { vals, mixes } = evaluateField(scene, cols, rows, params)
-    return Array.from(vals, (v, i) => colorAt(palettes, v, mixes[i], scene.noise[i], params, alpha))
-  }, [scene, palettes, alpha, cols, rows, params])
+  // params приходит целым объектом настроек, поэтому ключ из чисел слайдеров не дает пересчитывать поле при смене цвета и прозрачности
+  const paramsKey = SLIDERS.map((s) => params[s.key]).join(',')
+
+  // тяжелая часть, пятна по клеткам, зависит только от слайдеров и раскладки
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const field = useMemo(() => evaluateField(scene, cols, rows, params), [scene, cols, rows, paramsKey])
+
+  const colors = useMemo(
+    () => Array.from(field.vals, (v, i) => colorAt(palettes, v, field.mixes[i], scene.noise[i], params, alpha)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [field, palettes, alpha, scene, paramsKey],
+  )
 
   // цвета пишутся прямо в DOM, без перерисовки тысяч клеток React, иначе слайдеры тормозят
   const gridRef = useRef<HTMLDivElement>(null)

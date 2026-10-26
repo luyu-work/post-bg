@@ -9,7 +9,6 @@ export type SliderKey =
   | 'blobSize'
   | 'edgeSharp'
   | 'wobble'
-  | 'base'
   | 'power'
   | 'cellSize'
   | 'gap'
@@ -35,7 +34,6 @@ export const SLIDERS: SliderDef[] = [
   { key: 'blobSize', label: 'Размер пятен', group: 'Пятна', min: 0.3, max: 2, step: 0.01, def: 1 },
   { key: 'edgeSharp', label: 'Резкость края', group: 'Пятна', min: 1, max: 6, step: 0.1, def: 2.6 },
   { key: 'wobble', label: 'Искажение края', group: 'Пятна', min: 0, max: 3, step: 0.05, def: 1 },
-  { key: 'base', label: 'Яркость фона', group: 'Пятна', min: 0, max: 0.5, step: 0.01, def: 0.12 },
   { key: 'power', label: 'Сила пятен', group: 'Пятна', min: 0.2, max: 1, step: 0.01, def: 0.78 },
 
   { key: 'cellSize', label: 'Размер клетки', group: 'Сетка', min: 8, max: 40, step: 1, def: 18 },
@@ -45,7 +43,7 @@ export const SLIDERS: SliderDef[] = [
 ]
 
 export type Params = Record<SliderKey, number>
-// цвет это готовый пресет или свой цвет из пипетки, color всегда хранит выбранный цвет, alpha прозрачность клеток
+// цвет это готовый пресет или свой цвет из color-picker, color всегда хранит выбранный цвет, alpha прозрачность клеток
 export type Preset = HueName | 'custom'
 export type Settings = Params & { preset: Preset; color: string; alpha: number }
 

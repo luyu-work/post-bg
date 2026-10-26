@@ -29,7 +29,7 @@
   border-width: 0 8px;
   /* 10px по горизонтали минус рамка 8px дает круглые концы радиусом 2px у ползунка шириной 4px */
   border-radius: 10px / 2px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--stroke);
   background-clip: padding-box;
 }
 
@@ -40,6 +40,6 @@
 @supports not selector(::-webkit-scrollbar) {
   .settings-form {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+    scrollbar-color: var(--stroke) transparent;
   }
 }

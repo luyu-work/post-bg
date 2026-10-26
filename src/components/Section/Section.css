@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: var(--text);
   font: inherit;
   cursor: pointer;
 }
@@ -19,7 +19,7 @@
 .section__arrow {
   width: 8px;
   height: 8px;
-  color: #8f8f8f;
+  color: var(--text-muted);
   rotate: -90deg;
   transition: rotate 200ms ease;
 }

@@ -3,11 +3,11 @@
   height: var(--button, 32px);
   padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   display: grid;
   place-items: center;
   background: var(--surface);
-  color: #fff;
+  color: var(--text);
   cursor: pointer;
 }
 

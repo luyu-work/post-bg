@@ -7,12 +7,10 @@
   /* отступы живут внутри прокручиваемой формы, чтобы контент не обрезался по линии отступа */
   padding: 0;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   background: var(--glass-bg);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  color: #fff;
-  font: 500 14px/18px 'Onest', system-ui, sans-serif;
   transform: translateX(calc(100% + 12px));
   visibility: hidden;
   transition: transform 200ms ease 700ms, visibility 0s linear 900ms;
