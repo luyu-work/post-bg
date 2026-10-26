@@ -1,19 +1,21 @@
 .settings-form {
   height: 100%;
-  /* полоса прокрутки уходит в отступ панели и стоит по центру между контентом и краем */
-  margin-right: -24px;
+  /* отступ 20px внутри формы, контент уходит под него при прокрутке и обрезается краем панели,
+     справа отступ занимает дорожка полосы прокрутки */
+  padding: 20px 0 20px 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   overflow-y: auto;
 }
 
-/* дорожка 24px, ползунок 4px по центру за счет прозрачной рамки */
+/* дорожка 20px, ползунок 4px по центру за счет прозрачной рамки */
 .settings-form::-webkit-scrollbar {
-  width: 24px;
+  width: 20px;
 }
 
 .settings-form::-webkit-scrollbar-track {
+  margin: 20px 0;
   background: transparent;
 }
 
@@ -21,9 +23,9 @@
   /* рамка только по бокам, чтобы ползунок шел от верхнего до нижнего отступа панели без вертикальных зазоров */
   border-style: solid;
   border-color: transparent;
-  border-width: 0 10px;
-  /* 12px по горизонтали минус рамка 10px дает круглые концы радиусом 2px у ползунка шириной 4px */
-  border-radius: 12px / 2px;
+  border-width: 0 8px;
+  /* 10px по горизонтали минус рамка 8px дает круглые концы радиусом 2px у ползунка шириной 4px */
+  border-radius: 10px / 2px;
   background: rgba(255, 255, 255, 0.12);
   background-clip: padding-box;
 }

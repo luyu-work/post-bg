@@ -14,24 +14,30 @@ type Props = {
 const digitsOf = (step: number) => (step >= 1 ? 0 : step >= 0.1 ? 1 : 2)
 
 export const Slider = ({ label, value, min, max, step, onChange }: Props) => {
-  const style = { '--p': `${((value - min) / (max - min)) * 100}%` } as CSSProperties
+  const digits = digitsOf(step)
+  const style = { '--f': (value - min) / (max - min) } as CSSProperties
 
   return (
-    <label className="slider">
-      <span className="slider__head">
-        <span className="slider__label">{label}</span>
-        <span className="slider__value">{value.toFixed(digitsOf(step))}</span>
-      </span>
-      <input
-        className="slider__input"
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        style={style}
-        onChange={(e) => onChange(Number(e.target.value))}
-      />
-    </label>
+    <div className="slider">
+      <span className="slider__label">{label}</span>
+      <label className="slider__card">
+        <span className="slider__scale">
+          <span>{min.toFixed(digits)}</span>
+          <span className="slider__value">{value.toFixed(digits)}</span>
+          <span>{max.toFixed(digits)}</span>
+        </span>
+        <input
+          className="slider__input"
+          type="range"
+          aria-label={label}
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          style={style}
+          onChange={(e) => onChange(Number(e.target.value))}
+        />
+      </label>
+    </div>
   )
 }

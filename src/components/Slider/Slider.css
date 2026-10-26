@@ -1,17 +1,38 @@
 .slider {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.slider__head {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 .slider__label {
   color: #8f8f8f;
+  font-weight: 400;
+}
+
+/* карточка слайдера, внутри шкала и сам слайдер */
+.slider__card {
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+}
+
+/* три колонки, значение строго по центру карточки независимо от ширины минимума и максимума */
+.slider__scale {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  color: #8f8f8f;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+.slider__scale > :last-child {
+  justify-self: end;
 }
 
 .slider__value {
@@ -19,9 +40,15 @@
 }
 
 .slider__input {
-  --track: #2a2a2a;
+  --track: rgba(0, 0, 0, 0.3);
+  --bar: var(--accent, #1fdc8c);
+  --track-h: 4px;
+  --thumb-w: 24px;
+  --thumb-h: 16px;
+  /* заливка заканчивается в центре ползунка, а не в процентах всей дорожки */
+  --fill: calc(var(--thumb-w) / 2 + (100% - var(--thumb-w)) * var(--f));
   width: 100%;
-  height: 16px;
+  height: var(--thumb-h);
   margin: 0;
   background: transparent;
   -webkit-appearance: none;
@@ -30,38 +57,40 @@
 }
 
 .slider__input::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(to right, var(--accent, #1fdc8c) var(--p), var(--track) var(--p));
+  height: var(--track-h);
+  border-radius: calc(var(--track-h) / 2);
+  background: linear-gradient(to right, var(--bar) var(--fill), var(--track) var(--fill));
 }
 
 .slider__input::-webkit-slider-thumb {
-  width: 24px;
-  height: 16px;
-  margin-top: -6px;
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+  margin-top: calc((var(--track-h) - var(--thumb-h)) / 2);
   border: 0;
-  border-radius: 8px;
+  border-radius: calc(var(--thumb-h) / 2);
   background: #fff;
   -webkit-appearance: none;
   appearance: none;
 }
 
+.slider__input::-moz-range-track,
+.slider__input::-moz-range-progress {
+  height: var(--track-h);
+  border-radius: calc(var(--track-h) / 2);
+}
+
 .slider__input::-moz-range-track {
-  height: 4px;
-  border-radius: 2px;
   background: var(--track);
 }
 
 .slider__input::-moz-range-progress {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--accent, #1fdc8c);
+  background: var(--bar);
 }
 
 .slider__input::-moz-range-thumb {
-  width: 24px;
-  height: 16px;
+  width: var(--thumb-w);
+  height: var(--thumb-h);
   border: 0;
-  border-radius: 8px;
+  border-radius: calc(var(--thumb-h) / 2);
   background: #fff;
 }

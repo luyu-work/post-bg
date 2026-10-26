@@ -1,3 +1,10 @@
+/* общие цвета и стекло интерфейса */
+:root {
+  --surface: #151515;
+  --glass-bg: rgba(21, 21, 21, 0.8);
+  --glass-blur: blur(16px) saturate(1.2);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

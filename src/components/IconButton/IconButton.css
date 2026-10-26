@@ -1,0 +1,18 @@
+.icon-button {
+  width: var(--button, 28px);
+  height: var(--button, 28px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: #fff;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  display: block;
+  width: var(--icon, 16px);
+  height: var(--icon, 16px);
+}

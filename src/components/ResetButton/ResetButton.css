@@ -1,25 +1,9 @@
 /* кнопка сброса стоит под крестиком и появляется вместе с ним, при закрытии гаснет сразу */
 .reset-button {
-  width: var(--button, 28px);
-  height: var(--button, 28px);
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #151515;
-  color: #fff;
-  cursor: pointer;
   opacity: 0;
   scale: 0.0625;
   pointer-events: none;
   transition: opacity 100ms ease, scale 100ms ease;
-}
-
-.reset-button svg {
-  display: block;
-  width: var(--icon, 16px);
-  height: var(--icon, 16px);
 }
 
 .reset-button--visible {
