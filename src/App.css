@@ -1,4 +1,9 @@
+:root {
+  --settings-width: 320px;
+}
+
 .app__select {
+  transition: right 200ms ease 700ms;
   position: fixed;
   top: 16px;
   right: 16px;
@@ -6,5 +11,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: 12px;
+}
+
+/* панель настроек лежит поверх, органы управления отъезжают влево от нее */
+.app__select--shifted {
+  transition: right 200ms ease;
+  right: calc(12px + var(--settings-width) + 12px);
 }

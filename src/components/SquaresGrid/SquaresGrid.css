@@ -7,7 +7,7 @@
 }
 
 .squares-grid__cell {
-  width: var(--size);
-  height: var(--size);
+  width: var(--cell-w);
+  height: var(--cell-h);
   border-radius: 2px;
 }

@@ -4,20 +4,49 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   background: #151515;
   color: #fff;
   cursor: pointer;
 }
 
-.settings-button svg {
+/* обе иконки лежат в одной ячейке, меняются анимацией */
+.settings-button__icon {
+  grid-area: 1 / 1;
   width: var(--icon, 16px);
   height: var(--icon, 16px);
 }
 
-/* толщина линии в экранных пикселях, не зависит от размера иконки */
-.settings-button svg * {
-  vector-effect: non-scaling-stroke;
+.settings-button__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+  открытие: панель 200ms, шестеренка крутится 300ms, сжимается 300ms, появляется крестик 100ms.
+  Закрытие идет в обратном порядке: крестик гаснет 100ms, шестеренка растет 300ms, крутится назад 300ms, панель уезжает 200ms.
+*/
+.settings-button__gear {
+  transition: rotate 300ms ease 400ms, scale 300ms ease 100ms, opacity 300ms ease 100ms;
+}
+
+.settings-button__close {
+  scale: 0.0625;
+  opacity: 0;
+  transition: scale 100ms ease, opacity 100ms ease;
+}
+
+.settings-button--open .settings-button__gear {
+  rotate: 360deg;
+  scale: 0.0625;
+  opacity: 0;
+  transition: rotate 300ms ease 200ms, scale 300ms ease 500ms, opacity 300ms ease 500ms;
+}
+
+.settings-button--open .settings-button__close {
+  scale: 1;
+  opacity: 1;
+  transition: scale 100ms ease 800ms, opacity 100ms ease 800ms;
 }

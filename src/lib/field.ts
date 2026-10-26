@@ -11,7 +11,8 @@ type Blob = {
   pal: number
 }
 
-export type Field = { vals: Float32Array; mixes: Float32Array }
+// noise в -0.5..0.5, его амплитуду задает colorAt
+export type Field = { vals: Float32Array; mixes: Float32Array; noise: Float32Array }
 
 // 2-3 крупных пятна, края волнообразно изогнуты
 export const createField = (cols: number, rows: number): Field => {
@@ -34,6 +35,7 @@ export const createField = (cols: number, rows: number): Field => {
 
   const vals = new Float32Array(cols * rows)
   const mixes = new Float32Array(cols * rows)
+  const noise = new Float32Array(cols * rows)
   for (let i = 0; i < vals.length; i++) {
     const x = i % cols
     const y = (i / cols) | 0
@@ -57,7 +59,8 @@ export const createField = (cols: number, rows: number): Field => {
       wpal += g * b.pal
     }
     mixes[i] = wpal / wsum
-    vals[i] = 0.12 + 0.78 * (1 - rest) + (Math.random() - 0.5) * 0.14
+    vals[i] = 0.12 + 0.78 * (1 - rest)
+    noise[i] = Math.random() - 0.5
   }
-  return { vals, mixes }
+  return { vals, mixes, noise }
 }

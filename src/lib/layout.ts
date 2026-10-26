@@ -1,8 +1,9 @@
 const GAP = 2
-const PAD = 8
+const PAD = 2
 
 export type GridLayout = {
-  size: number
+  width: number
+  height: number
   gap: number
   cols: number
   rows: number
@@ -18,22 +19,38 @@ export const computeLayout = (): GridLayout => {
   const w = Math.floor(innerWidth * dpr) - pad * 2
   const h = Math.floor(innerHeight * dpr) - pad * 2
 
-  let best: { sz: number; c: number; r: number; left: number } | null = null
-  for (let sz = Math.round(10 * dpr); sz <= Math.round(18 * dpr); sz++) {
-    const c = Math.max(1, Math.floor((w + gap) / (sz + gap)))
-    const r = Math.max(1, Math.floor((h + gap) / (sz + gap)))
-    const left = w + gap - c * (sz + gap) + (h + gap - r * (sz + gap))
-    if (!best || left < best.left) best = { sz, c, r, left }
+  // сколько клеток помещается при размере sz и сколько пикселей остается
+  const fit = (total: number, sz: number) => {
+    const n = Math.max(1, Math.floor((total + gap) / (sz + gap)))
+    return { n, left: total + gap - n * (sz + gap) }
   }
-  const { sz, c: cols, r: rows } = best!
+
+  // ширина и высота клетки могут отличаться на 1 физический пиксель, это на глаз незаметно,
+  // зато остаток по обеим осям становится минимальным и поля одинаковые
+  const min = Math.round(14 * dpr)
+  const max = Math.round(22 * dpr)
+  let best: { sx: number; sy: number; cols: number; rows: number; leftX: number; leftY: number; cost: number } | null = null
+  for (let sx = min; sx <= max; sx++) {
+    for (let sy = sx - 1; sy <= sx + 1; sy++) {
+      if (sy < min || sy > max) continue
+      const fx = fit(w, sx)
+      const fy = fit(h, sy)
+      const cost = fx.left + fy.left + (sx === sy ? 0 : 0.5)
+      if (!best || cost < best.cost) {
+        best = { sx, sy, cols: fx.n, rows: fy.n, leftX: fx.left, leftY: fy.left, cost }
+      }
+    }
+  }
+  const { sx, sy, cols, rows, leftX, leftY } = best!
 
   const px = (v: number) => v / dpr
   return {
-    size: px(sz),
+    width: px(sx),
+    height: px(sy),
     gap: px(gap),
     cols,
     rows,
-    offX: px(pad + Math.floor((w + gap - cols * (sz + gap)) / 2)),
-    offY: px(pad + Math.floor((h + gap - rows * (sz + gap)) / 2)),
+    offX: px(pad + Math.floor(leftX / 2)),
+    offY: px(pad + Math.floor(leftY / 2)),
   }
 }
