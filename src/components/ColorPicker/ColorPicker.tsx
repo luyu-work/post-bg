@@ -36,7 +36,7 @@ export const ColorPicker = ({ color, alpha, onColor, onAlpha }: Props) => {
   const hue = useDrag((x) => apply([x * 360, hsv[1], hsv[2]]), INSET)
   const opacity = useDrag((x) => onAlpha(Math.round(x * 100) / 100), INSET)
 
-  // тянем иконку мышью, 1px равен 1%, как в Figma
+  // тянем иконку мышью, 2px равны 1%, как в Figma
   const scrubStart = useRef<{ x: number; value: number } | null>(null)
   const scrub = {
     onPointerDown: (e: PointerEvent<HTMLElement>) => {
@@ -45,7 +45,7 @@ export const ColorPicker = ({ color, alpha, onColor, onAlpha }: Props) => {
     },
     onPointerMove: (e: PointerEvent<HTMLElement>) => {
       const s = scrubStart.current
-      if (s) onAlpha(clamp(Math.round(s.value + e.clientX - s.x), 0, 100) / 100)
+      if (s) onAlpha(clamp(Math.round(s.value + (e.clientX - s.x) / 2), 0, 100) / 100)
     },
     onPointerUp: () => {
       scrubStart.current = null

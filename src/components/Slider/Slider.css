@@ -11,7 +11,7 @@
 
 /* карточка слайдера, внутри шкала и сам слайдер */
 .slider__card {
-  padding: 16px;
+  padding: 8px 12px 10px;
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.08);
