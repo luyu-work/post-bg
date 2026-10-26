@@ -12,6 +12,8 @@ export const App = () => {
   const { settings, update, reset } = useSettings()
   const [panelOpen, setPanelOpen] = useState(false)
   const [shuffle, setShuffle] = useState(0)
+  // форма собирается заново при каждом открытии, разделы снова закрыты, кроме цвета
+  const [openCount, setOpenCount] = useState(0)
   const closePanel = useCallback(() => setPanelOpen(false), [])
 
   // пресет это готовая палитра, свой цвет собирает палитру из выбранного
@@ -28,11 +30,14 @@ export const App = () => {
     <>
       <SquaresGrid palettes={palettes} alpha={settings.alpha} params={settings} shuffle={shuffle} />
       <div className={`app__controls${panelOpen ? ' app__controls--shifted' : ''}`}>
-        <SettingsButton expanded={panelOpen} onClick={() => setPanelOpen((v) => !v)} />
+        <SettingsButton expanded={panelOpen} onClick={() => {
+            if (!panelOpen) setOpenCount((n) => n + 1)
+            setPanelOpen(!panelOpen)
+          }} />
         <ResetButton visible={panelOpen} onClick={reset} />
       </div>
       <SettingsPanel open={panelOpen} onClose={closePanel}>
-        <SettingsForm settings={settings} onChange={update} onPreset={selectPreset} />
+        <SettingsForm key={openCount} settings={settings} onChange={update} onPreset={selectPreset} />
       </SettingsPanel>
     </>
   )

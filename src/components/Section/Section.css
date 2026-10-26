@@ -1,0 +1,56 @@
+.section__head {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.section__title {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.section__arrow {
+  width: 8px;
+  height: 8px;
+  color: #8f8f8f;
+  rotate: -90deg;
+  transition: rotate 200ms ease;
+}
+
+.section.is-open .section__arrow {
+  rotate: 0deg;
+}
+
+/* высота плавно уходит в ноль за счет строки сетки */
+.section__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease;
+}
+
+.section.is-open .section__body {
+  grid-template-rows: 1fr;
+}
+
+/* запас под кольцо выбранного цвета и обводку карточек, иначе их обрезает overflow */
+.section__content {
+  min-height: 0;
+  margin-left: -4px;
+  padding-left: 4px;
+  overflow: hidden;
+}
+
+/* зазор под заголовком лежит внутри, чтобы закрытая секция схлопывалась в ноль */
+.section__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}

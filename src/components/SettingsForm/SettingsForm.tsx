@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { ColorPicker } from '../ColorPicker'
 import { ColorPresets } from '../ColorPresets'
+import { Section } from '../Section'
 import { Slider } from '../Slider'
 import type { HueName } from '../../lib/palettes'
 import { SLIDERS, type Settings } from '../../lib/settings'
@@ -16,8 +17,7 @@ const GROUPS = [...new Set(SLIDERS.map((s) => s.group))]
 
 export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
   <div className="settings-form" style={{ '--accent': settings.color } as CSSProperties}>
-    <section className="settings-form__group">
-      <h3 className="settings-form__title">Цвет</h3>
+    <Section title="Цвет" defaultOpen>
       <ColorPresets value={settings.preset} onSelect={onPreset} />
       <ColorPicker
         color={settings.color}
@@ -25,11 +25,10 @@ export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
         onColor={(color) => onChange({ preset: 'custom', color })}
         onAlpha={(alpha) => onChange({ alpha })}
       />
-    </section>
+    </Section>
 
     {GROUPS.map((group) => (
-      <section key={group} className="settings-form__group">
-        <h3 className="settings-form__title">{group}</h3>
+      <Section key={group} title={group}>
         {SLIDERS.filter((s) => s.group === group).map((s) => (
           <Slider
             key={s.key}
@@ -41,7 +40,7 @@ export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
             onChange={(v) => onChange({ [s.key]: v })}
           />
         ))}
-      </section>
+      </Section>
     ))}
   </div>
 )
