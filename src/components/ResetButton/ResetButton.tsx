@@ -16,6 +16,7 @@ export const ResetButton = ({ visible, onClick }: Props) => {
       reveal={visible}
       revealIndex={1}
       aria-label="Сбросить настройки"
+      hint="Сбросить"
       onClick={() => {
         play()
         onClick()

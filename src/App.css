@@ -3,11 +3,13 @@
   --controls-gap: 8px;
   /* кнопки появляются после того, как панель выехала и крестик встал на место */
   --reveal-start: 800ms;
+  /* панель выезжает после того, как органы управления отъехали */
+  --panel-delay: 700ms;
   --reveal-duration: 250ms;
 }
 
 .app__controls {
-  transition: right 200ms ease 700ms;
+  transition: right var(--duration) var(--ease) var(--panel-delay);
   position: fixed;
   top: 16px;
   padding-top: 16px;
@@ -21,6 +23,6 @@
 
 /* панель настроек лежит поверх, органы управления отъезжают влево от нее */
 .app__controls--shifted {
-  transition: right 200ms ease;
+  transition: right var(--duration) var(--ease);
   right: calc(12px + var(--settings-width) + 12px);
 }

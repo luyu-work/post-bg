@@ -1,0 +1,16 @@
+.hint {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--fill);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text);
+  /* внутри button шрифт по умолчанию свой, поэтому семейство задано явно */
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 135%;
+  white-space: nowrap;
+  pointer-events: none;
+}

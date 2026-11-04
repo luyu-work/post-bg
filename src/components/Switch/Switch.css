@@ -1,8 +1,9 @@
 .switch {
-  --track-w: 40px;
-  --track-h: 24px;
-  --thumb: 16px;
-  --pad: calc((var(--track-h) - var(--thumb)) / 2);
+  /* все размеры кратны физическому пикселю, иначе при дробном масштабе экрана ползунок выглядит смещенным */
+  --thumb: calc(round(var(--dpr, 1) * 16, 1) / var(--dpr, 1) * 1px);
+  --pad: calc(round(var(--dpr, 1) * 4, 1) / var(--dpr, 1) * 1px);
+  --track-h: calc(var(--thumb) + var(--pad) * 2);
+  --track-w: calc(round(var(--dpr, 1) * 40, 1) / var(--dpr, 1) * 1px);
   width: 100%;
   padding: 0;
   border: 0;
@@ -17,12 +18,13 @@
 }
 
 .switch__track {
+  flex: none;
   width: var(--track-w);
   height: var(--track-h);
   padding: var(--pad);
   border-radius: calc(var(--track-h) / 2);
-  background: var(--fill);
-  transition: background 200ms ease;
+  background: var(--stroke);
+  transition: background var(--duration) var(--ease);
 }
 
 .switch__thumb {
@@ -30,15 +32,16 @@
   width: var(--thumb);
   height: var(--thumb);
   border-radius: 50%;
-  background: var(--text);
-  transition: translate 200ms ease;
+  background: var(--text-muted);
+  transition: translate var(--duration) var(--ease), background var(--duration) var(--ease);
 }
 
 .switch[aria-checked='true'] .switch__track {
-  background: var(--accent, #1fdc8c);
+  background: var(--accent, var(--accent-default));
 }
 
 .switch[aria-checked='true'] .switch__thumb {
+  background: var(--text);
   translate: calc(var(--track-w) - var(--thumb) - var(--pad) * 2) 0;
 }
 

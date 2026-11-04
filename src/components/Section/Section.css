@@ -21,7 +21,7 @@
   height: 8px;
   color: var(--text-muted);
   rotate: -90deg;
-  transition: rotate 200ms ease;
+  transition: rotate var(--duration) var(--ease);
 }
 
 .section.is-open .section__arrow {
@@ -32,7 +32,7 @@
 .section__body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 200ms ease;
+  transition: grid-template-rows var(--duration) var(--ease);
 }
 
 .section.is-open .section__body {

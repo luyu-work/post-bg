@@ -2,7 +2,20 @@
   display: flex;
   justify-content: space-between;
   /* запас под кольцо выбранного цвета, иначе оно обрезается краем прокручиваемой формы */
-  padding: 0 8px;
+  padding: 14px 8px 0;
+}
+
+.color-presets__cell {
+  position: relative;
+}
+
+/* подсказка над цветом по центру, отступ 4px, место под нее дает верхний padding и отступ секции */
+.color-presets__hint {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  translate: -50% 0;
+  z-index: 1;
 }
 
 .color-presets__item {
@@ -15,6 +28,6 @@
 }
 
 .color-presets__item.is-selected {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--white);
   outline-offset: 2px;
 }

@@ -1,16 +1,28 @@
 /* общие цвета и стекло интерфейса */
 :root {
+  --page-bg: #080808;
   --surface: #151515;
-  --glass-bg: rgba(21, 21, 21, 0.8);
+  --glass-bg: color-mix(in srgb, var(--surface) 80%, transparent);
   --glass-blur: blur(16px) saturate(1.2);
-  --text: #fff;
+  --white: #fff;
+  --black: #000;
+  --text: var(--white);
   --text-muted: #8f8f8f;
-  --fill: rgba(255, 255, 255, 0.08);
-  --stroke: rgba(255, 255, 255, 0.12);
+  --fill: color-mix(in srgb, var(--white) 8%, transparent);
+  --stroke: color-mix(in srgb, var(--white) 12%, transparent);
+  --font: 'Onest', system-ui, sans-serif;
   --radius-control: 8px;
   --radius-card: 16px;
+  /* акцент до выбора цвета */
+  --accent-default: #1fdc8c;
+  /* длительности и кривая переходов */
+  --duration-fast: 100ms;
+  --duration: 200ms;
+  --duration-slow: 300ms;
+  --ease: ease;
   /* шахматка под прозрачным цветом */
-  --checker: conic-gradient(#bdbdbd 25%, #fff 0 50%, #bdbdbd 0 75%, #fff 0) 0 0 / 8px 8px;
+  --checker-dark: #bdbdbd;
+  --checker: conic-gradient(var(--checker-dark) 25%, var(--white) 0 50%, var(--checker-dark) 0 75%, var(--white) 0) 0 0 / 8px 8px;
 }
 
 * {
@@ -22,8 +34,8 @@ html,
 body {
   width: 100%;
   height: 100%;
-  background: #080808;
+  background: var(--page-bg);
   overflow: hidden;
   color: var(--text);
-  font: 500 14px/18px 'Onest', system-ui, sans-serif;
+  font: 500 14px/18px var(--font);
 }

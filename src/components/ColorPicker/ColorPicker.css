@@ -10,8 +10,8 @@
   height: 180px;
   border-radius: var(--radius-control);
   background:
-    linear-gradient(to top, #000, transparent),
-    linear-gradient(to right, #fff, transparent),
+    linear-gradient(to top, var(--black), transparent),
+    linear-gradient(to right, var(--white), transparent),
     var(--hue);
   touch-action: none;
   cursor: crosshair;
@@ -21,9 +21,9 @@
   position: absolute;
   width: 16px;
   height: 16px;
-  border: 2px solid #fff;
+  border: 2px solid var(--white);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--black) 30%, transparent), 0 1px 4px color-mix(in srgb, var(--black) 40%, transparent);
   transform: translate(-50%, -50%);
   pointer-events: none;
 }

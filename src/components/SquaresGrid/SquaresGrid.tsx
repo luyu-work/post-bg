@@ -47,16 +47,13 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
       colorAt(palettes, v, field.mixes[i], shimmerNoise(scene.noise[i], params.shimmer, time), params, alpha),
     )
 
-  // неподвижная картинка: поле считается только от слайдеров и раскладки, прозрачность и палитра его не трогают
+  // поле считается заново от текущего положения пятен, поэтому смена цвета при работающей анимации не откатывает кадр назад
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const field = useMemo(() => {
+  const colors = useMemo(() => {
     syncCount(world, scene, params.blobs)
-    return evaluateField(world, cols, rows, params, timeRef.current)
+    return colorsOf(evaluateField(world, cols, rows, params, timeRef.current), timeRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [world, scene, cols, rows, paramsKey, animate])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const colors = useMemo(() => colorsOf(field, timeRef.current), [field, palettes, alpha, scene, paramsKey])
+  }, [world, scene, cols, rows, paramsKey, animate, palettes, alpha])
 
   // цвета пишутся прямо в DOM, без перерисовки тысяч клеток React, иначе слайдеры тормозят,
   // трогаются только клетки, чей цвет изменился с прошлого кадра
@@ -78,6 +75,10 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => paint(colors), [colors])
 
+  // цикл читает свежие значения из ref, поэтому перетаскивание цвета и слайдеров не перезапускает его и не останавливает кадры
+  const latest = useRef({ params, colorsOf })
+  latest.current = { params, colorsOf }
+
   useEffect(() => {
     if (!animate) return
     // время копится по кадрам с учетом скорости, поэтому смена скорости и пауза не дают скачка
@@ -88,6 +89,7 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame)
       if (now - last < interval) return
+      const { params, colorsOf } = latest.current
       const dt = Math.min((now - last) / 1000, MAX_STEP) * params.speed
       timeRef.current += dt
       last = now
@@ -98,7 +100,7 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
     raf = requestAnimationFrame(frame)
     return () => cancelAnimationFrame(raf)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animate, world, scene, palettes, alpha, cols, rows, paramsKey])
+  }, [animate, world, scene, cols, rows])
 
   const style: CSSProperties = {
     '--cell-w': `${width}px`,

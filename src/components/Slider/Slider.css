@@ -40,8 +40,8 @@
 }
 
 .slider__input {
-  --track: rgba(0, 0, 0, 0.3);
-  --bar: var(--accent, #1fdc8c);
+  --track: color-mix(in srgb, var(--black) 30%, transparent);
+  --bar: var(--accent, var(--accent-default));
   --track-h: 4px;
   --thumb-w: 24px;
   --thumb-h: 16px;
@@ -68,7 +68,7 @@
   margin-top: calc((var(--track-h) - var(--thumb-h)) / 2);
   border: 0;
   border-radius: calc(var(--thumb-h) / 2);
-  background: #fff;
+  background: var(--white);
   -webkit-appearance: none;
   appearance: none;
 }
@@ -92,5 +92,5 @@
   height: var(--thumb-h);
   border: 0;
   border-radius: calc(var(--thumb-h) / 2);
-  background: #fff;
+  background: var(--white);
 }

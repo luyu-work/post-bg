@@ -10,6 +10,7 @@ export const SettingsButton = ({ onClick, expanded = false }: Props) => {
       className={`settings-button${expanded ? ' settings-button--open' : ''}`}
       aria-label={expanded ? 'Закрыть настройки' : 'Настройки'}
       aria-expanded={expanded}
+      hint={expanded ? 'Закрыть' : undefined}
       onClick={onClick}
     >
       <span className="settings-button__icon settings-button__gear">

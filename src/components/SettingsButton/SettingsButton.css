@@ -6,28 +6,28 @@
 }
 
 /*
-  открытие: панель 200ms, шестеренка крутится 300ms, сжимается 300ms, появляется крестик 100ms.
-  Закрытие идет в обратном порядке: крестик гаснет 100ms, шестеренка растет 300ms, крутится назад 300ms, панель уезжает 200ms.
+  открытие: панель var(--duration), шестеренка крутится var(--duration-slow), сжимается var(--duration-slow), появляется крестик var(--duration-fast).
+  Закрытие идет в обратном порядке: крестик гаснет var(--duration-fast), шестеренка растет var(--duration-slow), крутится назад var(--duration-slow), панель уезжает var(--duration).
 */
 .settings-button__gear {
-  transition: rotate 300ms ease 400ms, scale 300ms ease 100ms, opacity 300ms ease 100ms;
+  transition: rotate var(--duration-slow) var(--ease) 400ms, scale var(--duration-slow) var(--ease) 100ms, opacity var(--duration-slow) var(--ease) 100ms;
 }
 
 .settings-button__close {
   scale: 0.0625;
   opacity: 0;
-  transition: scale 100ms ease, opacity 100ms ease;
+  transition: scale var(--duration-fast) var(--ease), opacity var(--duration-fast) var(--ease);
 }
 
 .settings-button--open .settings-button__gear {
   rotate: 360deg;
   scale: 0.0625;
   opacity: 0;
-  transition: rotate 300ms ease 200ms, scale 300ms ease 500ms, opacity 300ms ease 500ms;
+  transition: rotate var(--duration-slow) var(--ease) 200ms, scale var(--duration-slow) var(--ease) 500ms, opacity var(--duration-slow) var(--ease) 500ms;
 }
 
 .settings-button--open .settings-button__close {
   scale: 1;
   opacity: 1;
-  transition: scale 100ms ease 800ms, opacity 100ms ease 800ms;
+  transition: scale var(--duration-fast) var(--ease) var(--reveal-start), opacity var(--duration-fast) var(--ease) var(--reveal-start);
 }

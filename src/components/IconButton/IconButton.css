@@ -4,6 +4,7 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-control);
+  position: relative;
   display: grid;
   place-items: center;
   background: var(--surface);
@@ -28,7 +29,7 @@
   scale: 0.6;
   translate: 0 calc(var(--reveal-index) * -1 * (var(--button) + var(--controls-gap)));
   pointer-events: none;
-  transition: opacity 100ms ease, translate 100ms ease, scale 100ms ease;
+  transition: opacity var(--duration-fast) var(--ease), translate var(--duration-fast) var(--ease), scale var(--duration-fast) var(--ease);
 }
 
 .icon-button--reveal.is-visible {
@@ -37,7 +38,23 @@
   translate: 0 0;
   pointer-events: auto;
   transition:
-    opacity 100ms ease var(--reveal-delay),
-    translate var(--reveal-duration) ease var(--reveal-delay),
-    scale var(--reveal-duration) ease var(--reveal-delay);
+    opacity var(--duration-fast) var(--ease) var(--reveal-delay),
+    translate var(--reveal-duration) var(--ease) var(--reveal-delay),
+    scale var(--reveal-duration) var(--ease) var(--reveal-delay);
+}
+
+/* подсказка слева от кнопки на расстоянии 4px, по центру по вертикали */
+.icon-button__hint {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 4px);
+  translate: 0 -50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.icon-button:hover .icon-button__hint,
+.icon-button:focus-visible .icon-button__hint {
+  opacity: 1;
 }

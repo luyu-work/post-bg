@@ -15,6 +15,7 @@ export const DiceButton = ({ visible, onClick }: Props) => {
       reveal={visible}
       revealIndex={2}
       aria-label="Случайная картинка"
+      hint="Рандом"
       onClick={() => {
         play()
         onClick()

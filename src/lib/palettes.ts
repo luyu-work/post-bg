@@ -11,20 +11,19 @@ const HUES = {
   crimson: [['#2e0618', '#6e0f40', '#c0245e', '#e0467e', '#f87aa6']],
   purple: [['#1e0a38', '#4e1c92', '#8a3ee0', '#a95cf2', '#cf92ff']],
   yellow: [
-    ['#1a2e06', '#3d6b0a', '#6fb411', '#a8ee1c', '#e0ff7a'],
     ['#2e2606', '#6b5a0a', '#b49411', '#eec81c', '#fff07a'],
   ],
 } as const
 
 export type HueName = keyof typeof HUES
 
-export const HUE_OPTIONS: { value: HueName; label: string }[] = [
-  { value: 'green', label: 'Зеленый' },
-  { value: 'blue', label: 'Синий' },
-  { value: 'orange', label: 'Оранжевый' },
-  { value: 'crimson', label: 'Малиновый' },
-  { value: 'purple', label: 'Фиолетовый' },
-  { value: 'yellow', label: 'Желтый' },
+export const HUE_OPTIONS: { value: HueName; label: string; hint: string }[] = [
+  { value: 'green', label: 'Зеленый', hint: 'О нас' },
+  { value: 'blue', label: 'Синий', hint: 'Скрин' },
+  { value: 'orange', label: 'Оранжевый', hint: 'Анимация' },
+  { value: 'crimson', label: 'Малиновый', hint: 'Новости' },
+  { value: 'purple', label: 'Фиолетовый', hint: 'Мнение' },
+  { value: 'yellow', label: 'Желтый', hint: 'Мемы' },
 ]
 
 const parse = (hex: readonly string[]): Palette =>
