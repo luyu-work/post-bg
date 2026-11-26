@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test": "node --import ./tests/register-ts.mjs --test tests/*.test.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
@@ -11,6 +12,8 @@
   },
   "dependencies": {
     "@fontsource/onest": "^5.3.1",
+    "gifenc": "^1.0.3",
+    "mediabunny": "^1.66.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

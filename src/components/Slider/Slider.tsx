@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import './Slider.css'
 
 type Props = {
+  disabled?: boolean
   label: string
   value: number
   min: number
@@ -13,7 +14,7 @@ type Props = {
 // сколько знаков после запятой показывать, по шагу слайдера
 const digitsOf = (step: number) => (step >= 1 ? 0 : step >= 0.1 ? 1 : 2)
 
-export const Slider = ({ label, value, min, max, step, onChange }: Props) => {
+export const Slider = ({ label, value, min, max, step, onChange, disabled }: Props) => {
   const digits = digitsOf(step)
   const style = { '--f': (value - min) / (max - min) } as CSSProperties
 
@@ -29,6 +30,7 @@ export const Slider = ({ label, value, min, max, step, onChange }: Props) => {
         <input
           className="slider__input"
           type="range"
+          disabled={disabled}
           aria-label={label}
           min={min}
           max={max}

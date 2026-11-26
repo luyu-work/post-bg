@@ -31,3 +31,9 @@
   opacity: 1;
   transition: scale var(--duration-fast) var(--ease) var(--reveal-start), opacity var(--duration-fast) var(--ease) var(--reveal-start);
 }
+
+/* Короткие переходы согласованы с движением меню, без длинных пауз. */
+.settings-button__gear, .settings-button--open .settings-button__gear {
+  transition: rotate 420ms cubic-bezier(.22, 1, .36, 1), scale 220ms ease, opacity 180ms ease;
+}
+.settings-button--open .settings-button__close { transition: scale 220ms ease 140ms, opacity 180ms ease 140ms; }

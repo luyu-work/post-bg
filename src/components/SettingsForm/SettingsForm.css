@@ -1,5 +1,6 @@
 .settings-form {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   /* отступ 20px внутри формы, контент уходит под него при прокрутке и обрезается краем панели,
      справа отступ занимает дорожка полосы прокрутки */
   padding: 20px 0 20px 20px;
@@ -11,6 +12,12 @@
   scrollbar-gutter: stable;
   overflow-y: auto;
 }
+
+.settings-form > .section { flex-shrink: 0; }
+.settings-form__motion { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows var(--duration-slow) var(--ease), opacity var(--duration) var(--ease); }
+.settings-form__motion.is-open { grid-template-rows: 1fr; opacity: 1; }
+.settings-form__motion-clip { min-height: 0; overflow: hidden; }
+.settings-form__motion-content { display: flex; flex-direction: column; gap: 16px; }
 
 /* дорожка 20px, ползунок 4px по центру за счет прозрачной рамки */
 .settings-form::-webkit-scrollbar {

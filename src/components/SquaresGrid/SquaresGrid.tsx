@@ -1,4 +1,5 @@
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, type CSSProperties } from 'react'
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, type RefObject, type CSSProperties } from 'react'
+import type { ExportSource } from '../../lib/export'
 import { colorAt } from '../../lib/color'
 import { createScene, evaluateField, shimmerNoise, type Field } from '../../lib/field'
 import { createWorld, stepWorld, syncCount } from '../../lib/physics'
@@ -8,6 +9,7 @@ import { useGridLayout } from './useGridLayout'
 import './SquaresGrid.css'
 
 type Props = {
+  exportRef: RefObject<ExportSource | null>
   palettes: [Palette, Palette]
   alpha: number
   params: Params
@@ -24,7 +26,7 @@ const MAX_STEP = 0.1
 const LOAD_RATIO = 2
 
 // memo, чтобы открытие настроек не перерисовывало тысячи клеток
-export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: Props) => {
+export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate, exportRef }: Props) => {
   const { width, height, gap, cols, rows, offX, offY } = useGridLayout(params)
 
   // случайная часть живет отдельно от слайдеров, поэтому они двигают картинку без скачков
@@ -101,6 +103,11 @@ export const SquaresGrid = memo(({ palettes, alpha, params, shuffle, animate }: 
     return () => cancelAnimationFrame(raf)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animate, world, scene, cols, rows])
+
+  useLayoutEffect(() => {
+    exportRef.current = { snapshot: () => structuredClone({ scene, world, time: timeRef.current, params, alpha, palettes, layout: { width, height, gap, cols, rows, offX, offY }, viewport: { width: innerWidth, height: innerHeight } }) }
+    return () => { exportRef.current = null }
+  })
 
   const style: CSSProperties = {
     '--cell-w': `${width}px`,
