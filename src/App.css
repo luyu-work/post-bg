@@ -2,14 +2,15 @@
   --settings-width: 320px;
   --controls-gap: 8px;
   /* кнопки появляются после того, как панель выехала и крестик встал на место */
-  --reveal-start: 800ms;
+  --reveal-start: 420ms;
   /* панель выезжает после того, как органы управления отъехали */
-  --panel-delay: 700ms;
+  --panel-delay: 0ms;
   --reveal-duration: 250ms;
 }
 
 .app__controls {
-  transition: right var(--duration) var(--ease) var(--panel-delay);
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
   position: fixed;
   top: 16px;
   padding-top: 16px;
@@ -23,6 +24,5 @@
 
 /* панель настроек лежит поверх, органы управления отъезжают влево от нее */
 .app__controls--shifted {
-  transition: right var(--duration) var(--ease);
-  right: calc(12px + var(--settings-width) + 12px);
+  transform: translateX(calc(-1 * var(--settings-width) - 8px));
 }

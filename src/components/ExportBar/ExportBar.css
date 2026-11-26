@@ -1,0 +1,31 @@
+/* Единый блок в непрокручиваемой нижней части меню. */
+.export-bar {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  margin: 0 20px 20px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-card);
+  background: var(--fill);
+  overflow: hidden;
+}
+.export-bar__size { display: flex; align-items: center; padding: 4px; }
+.export-bar__field { display: flex; align-items: center; gap: 8px; padding: 0 8px; flex: 1; min-width: 0; height: 36px; }
+.export-size input { width: 100%; min-width: 0; border: 0; background: transparent; color: var(--text); font: inherit; appearance: textfield; }
+.export-size input::-webkit-inner-spin-button { appearance: none; }
+.export-bar button, .animation-export button { border: 0; font: inherit; cursor: pointer; }
+.export-bar__link { display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; background: transparent; color: var(--text-muted); border-radius: var(--radius-control); transition: color var(--duration) var(--ease), background var(--duration) var(--ease); }
+.export-bar__link[aria-pressed=true] { color: var(--accent); background: color-mix(in srgb, var(--accent) 15%, transparent); }
+.export-bar__download { width: 100%; min-height: 40px; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 12px; background: var(--accent); color: var(--black); transition: filter var(--duration) var(--ease), opacity var(--duration) var(--ease); }
+.export-bar__download:hover:not(:disabled) { filter: brightness(1.1); }
+.export-bar__note { font-size: 12px; line-height: 16px; color: var(--text-muted); }
+.export-bar > .export-bar__note { padding: 8px 12px; }
+.export-bar :focus-visible, .animation-export :focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
+.export-bar button:disabled, .animation-export button:disabled { opacity: .45; cursor: default; }
+.animation-export { display: flex; flex-direction: column; gap: 20px; padding: 20px 0 4px; border-top: 1px solid var(--stroke); }
+.animation-export__format { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--text-muted); }
+.animation-export .export-bar__download { border-radius: var(--radius-control); }
+.animation-export__cancel { background: var(--fill); color: var(--text); padding: 10px; border-radius: var(--radius-control); }
+
+.animation-export__size { display: flex; flex-direction: column; gap: 8px; }
+.animation-export__size .export-size { background: var(--fill); border: 1px solid var(--stroke); border-radius: var(--radius-control); }

@@ -1,4 +1,6 @@
 .settings-panel {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   top: 12px;
   right: 12px;
@@ -11,13 +13,20 @@
   background: var(--glass-bg);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  transform: translateX(calc(100% + 12px));
+  transform: translate3d(calc(100% + 12px), 0, 0);
+  will-change: transform;
   visibility: hidden;
-  transition: transform var(--duration) var(--ease) var(--panel-delay), visibility 0s linear calc(var(--panel-delay) + var(--duration));
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1), visibility 0s linear 420ms;
+}
+
+@media (max-width: 380px) {
+  :root { --settings-width: calc(100vw - 60px); }
 }
 
 .settings-panel--open {
-  transform: none;
+  transform: translate3d(0, 0, 0);
   visibility: visible;
-  transition: transform var(--duration) var(--ease);
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
 }
+
+@media (prefers-reduced-motion: reduce) { .settings-panel, .app__controls { transition-duration: 0s; transition-delay: 0s; } }

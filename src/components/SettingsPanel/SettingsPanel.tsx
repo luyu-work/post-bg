@@ -1,13 +1,14 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, type CSSProperties, type ReactNode } from 'react'
 import './SettingsPanel.css'
 
 type Props = {
+  color: string
   open: boolean
   onClose: () => void
   children?: ReactNode
 }
 
-export const SettingsPanel = ({ open, onClose, children }: Props) => {
+export const SettingsPanel = ({ open, onClose, children, color }: Props) => {
   useEffect(() => {
     if (!open) return
     const onKeyDown = (e: KeyboardEvent) => {
@@ -19,6 +20,7 @@ export const SettingsPanel = ({ open, onClose, children }: Props) => {
 
   return (
     <aside
+      style={{ '--accent': color } as CSSProperties}
       className={`settings-panel${open ? ' settings-panel--open' : ''}`}
       aria-hidden={!open}
       inert={!open}

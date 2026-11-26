@@ -1,4 +1,6 @@
 import type { CSSProperties } from 'react'
+import { AnimationExport } from '../ExportBar/ExportBar'
+import type { BackgroundExport } from '../../lib/useBackgroundExport'
 import { ColorPicker } from '../ColorPicker'
 import { ColorPresets } from '../ColorPresets'
 import { Section } from '../Section'
@@ -9,6 +11,7 @@ import { GROUP_ANIMATION, SLIDERS, type Settings } from '../../lib/settings'
 import './SettingsForm.css'
 
 type Props = {
+  exportControls: BackgroundExport
   settings: Settings
   onChange: (patch: Partial<Settings>) => void
   onPreset: (name: HueName) => void
@@ -16,7 +19,7 @@ type Props = {
 
 const GROUPS = [...new Set(SLIDERS.map((s) => s.group))]
 
-export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
+export const SettingsForm = ({ settings, onChange, onPreset, exportControls }: Props) => (
   <div className="settings-form" style={{ '--accent': settings.color } as CSSProperties}>
     <Section title="Цвет" defaultOpen>
       <ColorPresets value={settings.preset} onSelect={onPreset} />
@@ -33,8 +36,9 @@ export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
         {group === GROUP_ANIMATION && (
           <Switch label="Включить анимацию" checked={settings.animate} onChange={(animate) => onChange({ animate })} />
         )}
-        {/* пока анимация выключена, в разделе виден только свитч */}
-        {SLIDERS.filter((s) => s.group === group && (group !== GROUP_ANIMATION || settings.animate)).map((s) => (
+        <div className={group === GROUP_ANIMATION ? `settings-form__motion${settings.animate ? ' is-open' : ''}` : undefined} inert={group === GROUP_ANIMATION && !settings.animate}>
+        <div className="settings-form__motion-clip"><div className="settings-form__motion-content">
+        {SLIDERS.filter((s) => s.group === group).map((s) => (
           <Slider
             key={s.key}
             label={s.label}
@@ -45,6 +49,8 @@ export const SettingsForm = ({ settings, onChange, onPreset }: Props) => (
             onChange={(v) => onChange({ [s.key]: v })}
           />
         ))}
+        {group === GROUP_ANIMATION && <AnimationExport controls={exportControls} />}
+        </div></div></div>
       </Section>
     ))}
   </div>
